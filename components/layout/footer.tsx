@@ -1,71 +1,103 @@
-import Link from 'next/link';
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Separator } from '@/components/ui/separator'
+import { currentTeamConfig } from '@/config/teamConfig'
+import { Facebook, Instagram, Twitter, Youtube } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
 
-import FooterMenu from 'components/layout/footer-menu';
-import LogoSquare from 'components/logo-square';
-import { getMenu } from 'lib/shopify';
-import { Suspense } from 'react';
-
-const { COMPANY_NAME, SITE_NAME } = process.env;
-
-export default async function Footer() {
-  const currentYear = new Date().getFullYear();
-  const copyrightDate = 2023 + (currentYear > 2023 ? `-${currentYear}` : '');
-  const skeleton = 'w-full h-6 animate-pulse rounded bg-neutral-200 dark:bg-neutral-700';
-  const menu = await getMenu('next-js-frontend-footer-menu');
-  const copyrightName = COMPANY_NAME || SITE_NAME || '';
-
+export default function Footer() {
   return (
-    <footer className="text-sm text-neutral-500 dark:text-neutral-400">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 border-t border-neutral-200 px-6 py-12 text-sm md:flex-row md:gap-12 md:px-4 min-[1320px]:px-0 dark:border-neutral-700">
-        <div>
-          <Link className="flex items-center gap-2 text-black md:pt-1 dark:text-white" href="/">
-            <LogoSquare size="sm" />
-            <span className="uppercase">{SITE_NAME}</span>
-          </Link>
-        </div>
-        <Suspense
-          fallback={
-            <div className="flex h-[188px] w-[200px] flex-col gap-2">
-              <div className={skeleton} />
-              <div className={skeleton} />
-              <div className={skeleton} />
-              <div className={skeleton} />
-              <div className={skeleton} />
-              <div className={skeleton} />
+    <>
+      <footer
+        className="relative text-white overflow-hidden bg-gradient-to-r from-primary/90 to-primary/70"
+        style={{
+          backgroundImage: `url(${currentTeamConfig?.footerBackgroundImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundBlendMode: 'overlay',
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-4 py-16 space-y-12">
+          <div className='flex flex-row justify-between items-center'>
+            <div className="flex flex-col items-center justify-center">
+              <Image
+                src={currentTeamConfig?.logo as string}
+                alt={currentTeamConfig?.name as string}
+                width={150}
+                height={150}
+                className="w-auto h-auto max-h-24"
+                priority
+              />
+              <div className="flex space-x-4 mt-4">
+                <Link href={currentTeamConfig?.socialMedia.facebook || '#'} className="hover:text-primary-foreground transition-colors">
+                  <Facebook className="w-6 h-6" />
+                </Link>
+                <Link href={currentTeamConfig?.socialMedia.instagram || '#'} className="hover:text-primary-foreground transition-colors">
+                  <Instagram className="w-6 h-6" />
+                </Link>
+                <Link href={currentTeamConfig?.socialMedia.twitter || '#'} className="hover:text-primary-foreground transition-colors">
+                  <Twitter className="w-6 h-6" />
+                </Link>
+                <Link href={currentTeamConfig?.socialMedia.youtube || '#'} className="hover:text-primary-foreground transition-colors">
+                  <Youtube className="w-6 h-6" />
+                </Link>
+              </div>
             </div>
-          }
-        >
-          <FooterMenu menu={menu} />
-        </Suspense>
-        <div className="md:ml-auto">
-          <a
-            className="flex h-8 w-max flex-none items-center justify-center rounded-md border border-neutral-200 bg-white text-xs text-black dark:border-neutral-700 dark:bg-black dark:text-white"
-            aria-label="Deploy on Vercel"
-            href="https://vercel.com/templates/next.js/nextjs-commerce"
-          >
-            <span className="px-3">▲</span>
-            <hr className="h-full border-r border-neutral-200 dark:border-neutral-700" />
-            <span className="px-3">Deploy</span>
-          </a>
+
+            <div className="text-center md:text-left">
+              <h2 className="text-2xl font-bold mb-4">Stay Connected</h2>
+              <p className="mb-6">Sign up for email alerts and be the first to know about league info.</p>
+              <form className="flex flex-col sm:flex-row gap-4">
+                <Input
+                  type="email"
+                  placeholder="Enter email address"
+                  className="bg-white/10 border-white/20 text-white placeholder:text-white/60"
+                />
+                <Button variant="secondary" className="bg-secondary hover:bg-secondary/90 text-secondary-foreground">
+                  Subscribe
+                </Button>
+              </form>
+            </div>
+          </div>
         </div>
-      </div>
-      <div className="border-t border-neutral-200 py-6 text-sm dark:border-neutral-700">
-        <div className="mx-auto flex w-full max-w-7xl flex-col items-center gap-1 px-4 md:flex-row md:gap-0 md:px-4 min-[1320px]:px-0">
-          <p>
-            &copy; {copyrightDate} {copyrightName}
-            {copyrightName.length && !copyrightName.endsWith('.') ? '.' : ''} All rights reserved.
-          </p>
-          <hr className="mx-4 hidden h-4 w-[1px] border-l border-neutral-400 md:inline-block" />
-          <p>
-            <a href="https://github.com/vercel/commerce">View the source</a>
-          </p>
-          <p className="md:ml-auto">
-            <a href="https://vercel.com" className="text-black dark:text-white">
-              Created by ▲ Vercel
-            </a>
-          </p>
+
+        <Separator className="bg-white/20" />
+
+        {/* Download App Section */}
+        <div className="text-center py-6">
+          <h3 className="text-lg font-semibold mb-4">Download Our App</h3>
+          <div className="flex justify-center gap-4">
+            <Link
+              href={currentTeamConfig?.appStoreLinks.ios || '#'}
+              className="hover:opacity-80 transition-opacity"
+            >
+              <Image alt='istore logo' height={100} width={100} src={'https://upload.wikimedia.org/wikipedia/commons/9/91/Download_on_the_App_Store_RGB_blk.svg'}></Image>
+            </Link>
+            <Link
+              href={currentTeamConfig?.appStoreLinks.android || '#'}
+              className="hover:opacity-80 transition-opacity"
+            >
+              <Image alt='istore logo' height={110} width={110} src={'https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg'}></Image>
+            </Link>
+          </div>
         </div>
-      </div>
-    </footer>
-  );
+
+        {/* Footer Links */}
+        <nav className="flex flex-wrap justify-center gap-6 text-sm m-5">
+          <Link href="/privacy-policy" className="hover:underline">Privacy Policy</Link>
+          <Link href="/media-credentials" className="hover:underline">Media Credentials</Link>
+          <Link href="https://www.teamworkonline.com/other-sports-jobs/major-league-rugby/seattle-seawolves-jobs" className="hover:underline">Careers</Link>
+          <Link href="/contact-us" className="hover:underline">Contact Us</Link>
+        </nav>
+
+        {/* Copyright */}
+        <div className="text-center text-sm text-white/80 max-w-4xl mx-auto pb-8">
+          <p className="mb-2">© {new Date().getFullYear()} Major League Rugby. All rights reserved. Major League Rugby, MLR and the MLR shield design are registered trademarks of Major League Rugby.</p>
+          <p>The team names, logos and designs are registered trademarks of the teams indicated.</p>
+        </div>
+      </footer>
+    </>
+  )
 }

@@ -1,29 +1,77 @@
-import { AddToCart } from 'components/cart/add-to-cart';
-import Price from 'components/price';
-import Prose from 'components/prose';
-import { Product } from 'lib/shopify/types';
-import { VariantSelector } from './variant-selector';
+import { Product } from "@/lib/shopify/types";
+import { Check } from "lucide-react";
+import { AddToCart } from "../cart/add-to-cart";
+import Price from "../price";
+import Prose from "../prose";
+import { VariantSelector } from "./variant-selector";
 
-export function ProductDescription({ product }: { product: Product }) {
+interface ProductDescriptionProps {
+  product: Product;
+}
+
+export function ProductDescription({ product }: ProductDescriptionProps) {
+  if (!product) {
+    return <div>Product information is not available.</div>;
+  }
+
   return (
-    <>
-      <div className="mb-6 flex flex-col border-b pb-6 dark:border-neutral-700">
-        <h1 className="mb-2 text-5xl font-medium">{product.title}</h1>
-        <div className="mr-auto w-auto rounded-full bg-blue-600 p-2 text-sm text-white">
-          <Price
-            amount={product.priceRange.maxVariantPrice.amount}
-            currencyCode={product.priceRange.maxVariantPrice.currencyCode}
-          />
+    <div className="flex flex-col h-full space-y-6">
+      <header>
+        <h1 className="text-3xl text-secondary/90 mt-2">{product.title}</h1>
+      </header>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
+        <div className="flex items-center space-x-2">
+     
+           {product.priceRange?.maxVariantPrice && (
+            <Price
+              amount={product.priceRange.maxVariantPrice.amount}
+              currencyCode={product.priceRange.maxVariantPrice.currencyCode}
+              className="text-2xl"
+            />
+          )}
+              
+              <span className="text-sm text-gray-500">
+            {product.priceRange?.maxVariantPrice?.currencyCode}
+          </span>
+        </div>
+        <div className="flex items-center space-x-2">
+          <span className="inline-flex items-center px-3 py-1 text-sm font-medium text-green-800 bg-green-100 rounded-full">
+            <Check className="w-4 h-4 mr-1 stroke-2" />
+            In stock
+          </span>
+          <span className="text-sm text-gray-500">Ships in 1-2 days</span>
         </div>
       </div>
-      <VariantSelector options={product.options} variants={product.variants} />
-      {product.descriptionHtml ? (
+      {product.descriptionHtml && (
         <Prose
-          className="mb-6 text-sm leading-tight dark:text-white/[60%]"
+          className="text-md text-gray-600 leading-5"
           html={product.descriptionHtml}
         />
-      ) : null}
+      )}
+      {product.options && product.variants && (
+        <VariantSelector options={product.options} variants={product.variants} />
+      )}
       <AddToCart product={product} />
-    </>
+      <div className="border-t border-gray-200 pt-6">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">Highlights</h2>
+        <ul className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm text-gray-600">
+          {[
+            'Hand cut and sewn locally',
+            'Dyed with our proprietary colors',
+            'Pre-washed & pre-shrunk',
+            'Ultra-soft 100% cotton'
+          ].map((highlight, index) => (
+            <li key={index} className="flex items-center">
+              <svg className="w-4 h-4 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              </svg>
+              {highlight}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 }
+
+export default ProductDescription;

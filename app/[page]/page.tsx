@@ -24,7 +24,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({ params }: { params: { page: string } }) {
+export default async function S({ params }: { params: { page: string } }) {
   const page = await getPage(params.page);
 
   if (!page) return notFound();

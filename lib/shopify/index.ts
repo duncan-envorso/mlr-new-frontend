@@ -1,3 +1,5 @@
+'use server'
+
 import { HIDDEN_PRODUCT_TAG, SHOPIFY_GRAPHQL_API_ENDPOINT, TAGS } from 'lib/constants';
 import { isShopifyError } from 'lib/type-guards';
 import { ensureStartsWith } from 'lib/utils';
@@ -39,6 +41,7 @@ import {
   ShopifyCollectionProductsOperation,
   ShopifyCollectionsOperation,
   ShopifyCreateCartOperation,
+  ShopifyMenuItem,
   ShopifyMenuOperation,
   ShopifyPageOperation,
   ShopifyPagesOperation,
@@ -341,21 +344,46 @@ export async function getCollections(): Promise<Collection[]> {
 }
 
 export async function getMenu(handle: string): Promise<Menu[]> {
-  const res = await shopifyFetch<ShopifyMenuOperation>({
-    query: getMenuQuery,
-    tags: [TAGS.collections],
-    variables: {
-      handle
-    }
-  });
+  if (!handle) {
+    console.warn('No menu handle provided to getMenu function');
+    return [];
+  }
 
-  return (
-    res.body?.data?.menu?.items.map((item: { title: string; url: string }) => ({
+  const transformMenuItem = (item: ShopifyMenuItem): Menu => {
+    return {
       title: item.title,
-      path: item.url.replace(domain, '').replace('/collections', '/search').replace('/pages', '')
-    })) || []
-  );
+      path: item.url
+        .replace(domain, '')
+        .replace('/collections', '/search')
+        .replace('/pages', ''),
+      // Only include items property if there are nested items
+      ...(item.items && item.items.length > 0 && {
+        items: item.items.map(transformMenuItem)
+      })
+    };
+  };
+
+  try {
+    const res = await shopifyFetch<ShopifyMenuOperation>({
+      query: getMenuQuery,
+      tags: [TAGS.collections],
+      variables: {
+        handle: handle.trim()
+      }
+    });
+
+    if (!res.body?.data?.menu?.items) {
+      console.warn(`No menu found for handle: ${handle}`);
+      return [];
+    }
+
+    return res.body.data.menu.items.map(transformMenuItem);
+  } catch (error) {
+    console.error(`Error fetching menu with handle ${handle}:`, error);
+    return [];
+  }
 }
+
 
 export async function getPage(handle: string): Promise<Page> {
   const res = await shopifyFetch<ShopifyPageOperation>({

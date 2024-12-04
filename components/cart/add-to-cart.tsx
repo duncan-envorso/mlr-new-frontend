@@ -1,10 +1,11 @@
 'use client';
 
-import { PlusIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { addItem } from 'components/cart/actions';
 import { useProduct } from 'components/product/product-context';
+import { motion } from 'framer-motion';
 import { Product, ProductVariant } from 'lib/shopify/types';
+import { ShoppingBag } from 'lucide-react';
 import { useFormState } from 'react-dom';
 import { useCart } from './cart-context';
 
@@ -16,8 +17,8 @@ function SubmitButton({
   selectedVariantId: string | undefined;
 }) {
   const buttonClasses =
-    'relative flex w-full items-center justify-center rounded-full bg-blue-600 p-4 tracking-wide text-white';
-  const disabledClasses = 'cursor-not-allowed opacity-60 hover:opacity-60';
+    'relative flex w-full items-center justify-center rounded-full bg-primary p-4 tracking-wide text-white font-medium text-sm';
+  const disabledClasses = 'bg-gray-300 text-gray-500';
 
   if (!availableForSale) {
     return (
@@ -27,7 +28,6 @@ function SubmitButton({
     );
   }
 
-  console.log(selectedVariantId);
   if (!selectedVariantId) {
     return (
       <button
@@ -35,26 +35,21 @@ function SubmitButton({
         disabled
         className={clsx(buttonClasses, disabledClasses)}
       >
-        <div className="absolute left-0 ml-4">
-          <PlusIcon className="h-5" />
-        </div>
-        Add To Cart
+        Select Options
       </button>
     );
   }
 
   return (
-    <button
+    <motion.button
+      whileHover={{ scale: 1.01 }}
+      whileTap={{ scale: 0.95 }}
       aria-label="Add to cart"
-      className={clsx(buttonClasses, {
-        'hover:opacity-90': true
-      })}
+      className={buttonClasses}
     >
-      <div className="absolute left-0 ml-4">
-        <PlusIcon className="h-5" />
-      </div>
+      <ShoppingBag className="h-5 w-5 mr-2 text-accent" />
       Add To Cart
-    </button>
+    </motion.button>
   );
 }
 
@@ -78,6 +73,7 @@ export function AddToCart({ product }: { product: Product }) {
         addCartItem(finalVariant, product);
         await actionWithVariant();
       }}
+      className="mt-6"
     >
       <SubmitButton availableForSale={availableForSale} selectedVariantId={selectedVariantId} />
       <p aria-live="polite" className="sr-only" role="status">

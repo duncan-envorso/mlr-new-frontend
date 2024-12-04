@@ -1,54 +1,70 @@
-const plugin = require('tailwindcss/plugin');
+// tailwind.config.js
+let teamConfig;
+import { currentTeamConfig } from './config/teamConfig';
+
+try {
+  const { currentTeamConfig } = require('./config/teamConfig.ts');
+  teamConfig = currentTeamConfig;
+} catch (error) {
+  console.warn("Unable to load team config. Using fallback values.", error);
+  teamConfig = {
+    colors: {
+      primary: 'hsl(152, 100%, 20%)',
+      secondary: 'hsl(0, 0%, 13%)',
+      accent: 'hsl(201, 76%, 63%)',
+      background: 'var(--background)',
+      border: 'var(--border)',
+
+      'primary-foreground': 'hsl(0, 0%, 85%)',
+      'secondary-foreground': 'hsl(0, 0%, 90%)',
+      'accent-foreground': 'hsl(220, 17%, 20%)',
+    },
+    fonts: {
+      heading: ['Montserrat', 'sans-serif'],
+      body: ['Roboto', 'sans-serif'],
+    },
+    logo: '/images/default-logo.png',
+  };
+}
 
 /** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: ['./app/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
-  theme: {
-    extend: {
-      fontFamily: {
-        sans: ['var(--font-geist-sans)']
-      },
-      keyframes: {
-        fadeIn: {
-          from: { opacity: 0 },
-          to: { opacity: 1 }
-        },
-        marquee: {
-          '0%': { transform: 'translateX(0%)' },
-          '100%': { transform: 'translateX(-100%)' }
-        },
-        blink: {
-          '0%': { opacity: 0.2 },
-          '20%': { opacity: 1 },
-          '100% ': { opacity: 0.2 }
-        }
-      },
-      animation: {
-        fadeIn: 'fadeIn .3s ease-in-out',
-        carousel: 'marquee 60s linear infinite',
-        blink: 'blink 1.4s both infinite'
-      }
-    }
+export const content = [
+  "./app/**/*.{js,ts,jsx,tsx,mdx}",
+  "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+  "./components/**/*.{js,ts,jsx,tsx,mdx}",
+];
+
+export const theme = {
+  extend: {
+    colors: {
+      primary: teamConfig.colors.primary,
+      secondary: teamConfig.colors.secondary,
+      accent: teamConfig.colors.accent,
+      'primary-foreground': teamConfig.colors['primary-foreground'],
+      'secondary-foreground': teamConfig.colors['secondary-foreground'],
+      'accent-foreground': teamConfig.colors['accent-foreground'],
+      card: 'white', // This will create a bg-card class
+    },
+    fontFamily: {
+      'h1': teamConfig.fonts.h1,
+      'h2': teamConfig.fonts.h2,
+      'h3': teamConfig.fonts.h3,
+      'h4': teamConfig.fonts.h4,
+      'h5': teamConfig.fonts.h5,
+      'h6': teamConfig.fonts.h6,
+      'body': teamConfig.fonts.body,
+    },
+    backgroundImage: {
+      'hero-pattern': "url('/images/rugby-field.jpg')",
+      'team-logo': `url('${teamConfig.logo}')`,
+    },
+    borderRadius: {
+      'rugby-ball': '50% / 20%',
+    },
   },
-  future: {
-    hoverOnlyWhenSupported: true
-  },
-  plugins: [
-    require('@tailwindcss/container-queries'),
-    require('@tailwindcss/typography'),
-    plugin(({ matchUtilities, theme }) => {
-      matchUtilities(
-        {
-          'animation-delay': (value) => {
-            return {
-              'animation-delay': value
-            };
-          }
-        },
-        {
-          values: theme('transitionDelay')
-        }
-      );
-    })
-  ]
 };
+
+export const plugins = [
+  // require('@tailwindcss/forms'),
+  require('@tailwindcss/typography'),
+];

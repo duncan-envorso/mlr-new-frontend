@@ -2,20 +2,108 @@
 @tailwind components;
 @tailwind utilities;
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+
+/* add the code bellow */ 
+@layer utilities {
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+   /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
   }
 }
 
-@supports (font: -apple-system-body) and (-webkit-appearance: none) {
-  img[loading='lazy'] {
-    clip-path: inset(0.6px);
+@font-face {
+    font-family: 'IndustryTest-Black';
+    src: url('/fonts/IndustryTest-Black.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
   }
+  
+  @font-face {
+    font-family: 'IndustryTest-Bold';
+    src: url('/fonts/IndustryTest-Bold.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  @font-face {
+    font-family: 'IndustryTest-Medium';
+    src: url('/fonts/IndustryTest-Medium.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  @font-face {
+    font-family: 'IndustryTest-Book';
+    src: url('/fonts/IndustryTest-Book.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  @font-face {
+    font-family: 'IndustryTest-Demi';
+    src: url('/fonts/IndustryTest-Demi.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  @font-face {
+    font-family: 'IndustryTest-Light';
+    src: url('/fonts/IndustryTest-Light.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  @font-face {
+    font-family: 'IndustryTest-Thin';
+    src: url('/fonts/IndustryTest-Thin.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  /* Apply the fonts to the respective elements */
+  h1 { @apply font-h1; }
+  h2 { @apply font-h2; }
+  h3 { @apply font-h3; }
+  h4 { @apply font-h4; }
+  h5 { @apply font-h5; }
+  h6 { @apply font-h6; }
+  body { @apply font-body; }
+
+
+  @layer base {
+  :root {
+        --sidebar-background: 0 0% 98%;
+        --sidebar-foreground: 240 5.3% 26.1%;
+        --sidebar-primary: 240 5.9% 10%;
+        --sidebar-primary-foreground: 0 0% 98%;
+        --sidebar-accent: 240 4.8% 95.9%;
+        --sidebar-accent-foreground: 240 5.9% 10%;
+        --sidebar-border: 220 13% 91%;
+        --sidebar-ring: 217.2 91.2% 59.8%;
+        --background: rgba(198, 30, 30, 0.8); /* Example value */
+        --border: #e5e7eb;
+    }
+  .dark {
+        --sidebar-background: 240 5.9% 10%;
+        --sidebar-foreground: 240 4.8% 95.9%;
+        --sidebar-primary: 224.3 76.3% 48%;
+        --sidebar-primary-foreground: 0 0% 100%;
+        --sidebar-accent: 240 3.7% 15.9%;
+        --sidebar-accent-foreground: 240 4.8% 95.9%;
+        --sidebar-border: 240 3.7% 15.9%;
+        --sidebar-ring: 217.2 91.2% 59.8%;
+    }
 }
 
-a,
-input,
-button {
-  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-50 dark:focus-visible:ring-neutral-600 dark:focus-visible:ring-offset-neutral-900;
-}

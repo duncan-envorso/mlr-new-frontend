@@ -1,13 +1,15 @@
 /** @type {import('next').NextConfig} */
-module.exports = {
+const nextConfig = {
   images: {
-    formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'cdn.shopify.com',
-        pathname: '/s/files/**'
+        hostname: '*',
+        port: '',
+        pathname: '**'
       }
     ]
   }
 };
+
+module.exports = nextConfig;

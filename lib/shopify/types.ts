@@ -50,6 +50,7 @@ export type Image = {
 export type Menu = {
   title: string;
   path: string;
+  items?: Menu[];
 };
 
 export type Money = {
@@ -222,10 +223,7 @@ export type ShopifyCollectionsOperation = {
 export type ShopifyMenuOperation = {
   data: {
     menu?: {
-      items: {
-        title: string;
-        url: string;
-      }[];
+      items: ShopifyMenuItem[];
     };
   };
   variables: {
@@ -270,3 +268,43 @@ export type ShopifyProductsOperation = {
     sortKey?: string;
   };
 };
+
+export type ShopifyMenuItem = {
+  id: string;
+  title: string;
+  url: string;
+  items?: ShopifyMenuItem[];
+};
+
+export type ShopifyCollectionWithProductsOperation = {
+  data: {
+    collection: {
+      handle: string;
+      title: string;
+      description: string;
+      seo: SEO;
+      updatedAt: string;
+      products: Connection<ShopifyProduct>;
+    } | null;
+  };
+  variables: {
+    handle: string;
+    sortKey?: string;
+    reverse?: boolean;
+  };
+};
+
+export interface GetCollectionProductsResult {
+  collection: {
+    products: {
+      edges: {
+        node: Product;
+      }[];
+    };
+  };
+}
+
+export interface CollectionWithProducts {
+  handle: string
+  products: Product[]
+}

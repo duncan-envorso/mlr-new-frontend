@@ -32,9 +32,13 @@ export default async function CategoryPage({
   const { sort } = searchParams as { [key: string]: string };
   const { sortKey, reverse } = sorting.find((item) => item.slug === sort) || defaultSort;
   const products = await getCollectionProducts({ collection: params.collection, sortKey, reverse });
-
+  const capitalizedText = params.collection.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
   return (
-    <section>
+    <section >
+      <div className=''>
+      <h2 className='text-2xl font-bold mb-4'>{capitalizedText}</h2>
+      </div>
+      
       {products.length === 0 ? (
         <p className="py-3 text-lg">{`No products found in this collection`}</p>
       ) : (

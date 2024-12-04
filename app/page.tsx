@@ -1,20 +1,49 @@
-import { Carousel } from 'components/carousel';
-import { ThreeItemGrid } from 'components/grid/three-items';
-import Footer from 'components/layout/footer';
+import { fetchTeamData, getMatchData, getNewsPosts } from '@/actions'
+import HeroSectionTwo from '@/components/home/herosection2'
+import NewsSection from '@/components/home/LatestNews'
+import MatchCarousel from '@/components/home/MatchCarousel'
+import { SponsorsSection } from '@/components/home/Sponsors'
+import TeamRosterSection from '@/components/home/TeamRosterSection'
+import { UpcomingMatchesCarousel } from '@/components/home/UpcomingMatches'
+import { upcomingMatchesData } from '@/mockdata'
+import { Suspense } from 'react'
 
-export const metadata = {
-  description: 'High-performance ecommerce store built with Next.js, Vercel, and Shopify.',
-  openGraph: {
-    type: 'website'
+async function getHeroData() {
+  // In a real application, you would fetch this data from your database
+  return {
+    title: "DOMINATE THE FIELD",
+    subtitle: "Experience the raw power and strategic brilliance of American Rugby",
+    ctaPrimary: "Get Tickets",
+    ctaSecondary: "Watch Highlights",
+    homePageVideoUrl: "https://cdn.prod.website-files.com/65417651935f4a88a94aebb0/65d640d585ad7fb7ff91bd4d_highlight%20reel-transcode.webm"
   }
-};
+}
 
-export default function HomePage() {
+export default async function Home() {
+  const newsPosts = await getNewsPosts()
+  const heroData = await getHeroData()
+  const apiFormattedData = await fetchTeamData()
+  const matches = await getMatchData()
+
+
+
+
+
   return (
-    <>
-      <ThreeItemGrid />
-      <Carousel />
-      <Footer />
-    </>
-  );
+    <div className="bg-slate-200">
+     
+      <HeroSectionTwo  />
+      <NewsSection news={newsPosts} />
+      
+
+        <UpcomingMatchesCarousel matches={upcomingMatchesData} />
+
+      <Suspense>
+        <TeamRosterSection apiFormattedData={apiFormattedData} />
+      </Suspense>
+      <SponsorsSection />
+      <MatchCarousel matches={matches.pastMatchesData} />
+    
+      </div>
+  )
 }

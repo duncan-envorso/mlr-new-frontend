@@ -1,4 +1,3 @@
-import productFragment from '../fragments/product';
 import seoFragment from '../fragments/seo';
 
 const collectionFragment = /* GraphQL */ `
@@ -10,6 +9,72 @@ const collectionFragment = /* GraphQL */ `
       ...seo
     }
     updatedAt
+    products(first: 100) {
+      edges {
+        node {
+          id
+          handle
+          availableForSale
+          title
+          description
+          descriptionHtml
+          options {
+            id
+            name
+            values
+          }
+          priceRange {
+            maxVariantPrice {
+              amount
+              currencyCode
+            }
+            minVariantPrice {
+              amount
+              currencyCode
+            }
+          }
+          variants(first: 250) {
+            edges {
+              node {
+                id
+                title
+                availableForSale
+                selectedOptions {
+                  name
+                  value
+                }
+                price {
+                  amount
+                  currencyCode
+                }
+              }
+            }
+          }
+          featuredImage {
+            url
+            altText
+            width
+            height
+          }
+          images(first: 20) {
+            edges {
+              node {
+                url
+                altText
+                width
+                height
+              }
+            }
+          }
+          seo {
+            description
+            title
+          }
+          tags
+          updatedAt
+        }
+      }
+    }
   }
   ${seoFragment}
 `;
@@ -46,11 +111,69 @@ export const getCollectionProductsQuery = /* GraphQL */ `
       products(sortKey: $sortKey, reverse: $reverse, first: 100) {
         edges {
           node {
-            ...product
+            id
+            handle
+            availableForSale
+            title
+            description
+            descriptionHtml
+            options {
+              id
+              name
+              values
+            }
+            priceRange {
+              maxVariantPrice {
+                amount
+                currencyCode
+              }
+              minVariantPrice {
+                amount
+                currencyCode
+              }
+            }
+            variants(first: 250) {
+              edges {
+                node {
+                  id
+                  title
+                  availableForSale
+                  selectedOptions {
+                    name
+                    value
+                  }
+                  price {
+                    amount
+                    currencyCode
+                  }
+                }
+              }
+            }
+            featuredImage {
+              url
+              altText
+              width
+              height
+            }
+            images(first: 20) {
+              edges {
+                node {
+                  url
+                  altText
+                  width
+                  height
+                }
+              }
+            }
+            seo {
+              description
+              title
+            }
+            tags
+            updatedAt
           }
         }
       }
     }
   }
-  ${productFragment}
 `;

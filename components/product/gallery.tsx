@@ -1,92 +1,110 @@
 'use client';
 
-import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
-import { GridTileImage } from 'components/grid/tile';
 import { useProduct, useUpdateURL } from 'components/product/product-context';
+import { AnimatePresence, motion } from 'framer-motion';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 
 export function Gallery({ images }: { images: { src: string; altText: string }[] }) {
   const { state, updateImage } = useProduct();
   const updateURL = useUpdateURL();
   const imageIndex = state.image ? parseInt(state.image) : 0;
-
   const nextImageIndex = imageIndex + 1 < images.length ? imageIndex + 1 : 0;
   const previousImageIndex = imageIndex === 0 ? images.length - 1 : imageIndex - 1;
 
   const buttonClassName =
-    'h-full px-6 transition-all ease-in-out hover:scale-110 hover:text-black dark:hover:text-white flex items-center justify-center';
+    'absolute top-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow-md transition-all duration-200 hover:scale-110';
 
   return (
-    <form>
-      <div className="relative aspect-square h-full max-h-[550px] w-full overflow-hidden">
-        {images[imageIndex] && (
-          <Image
-            className="h-full w-full object-contain"
-            fill
-            sizes="(min-width: 1024px) 66vw, 100vw"
-            alt={images[imageIndex]?.altText as string}
-            src={images[imageIndex]?.src as string}
-            priority={true}
-          />
-        )}
+    <div className="relative">
+      <div className="aspect-square overflow-hidden rounded-3xl bg-gray-100">
+        <AnimatePresence initial={false}>
+          <motion.div
+            key={imageIndex}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="h-full w-full"
+          >
+            <Image
+              className="h-full w-full object-cover"
+              fill
+              sizes="(min-width: 1024px) 66vw, 100vw"
+              alt={images[imageIndex]?.altText as string}
+              src={images[imageIndex]?.src as string}
+              priority={true}
+            />
+          </motion.div>
+        </AnimatePresence>
 
-        {images.length > 1 ? (
-          <div className="absolute bottom-[15%] flex w-full justify-center">
-            <div className="mx-auto flex h-11 items-center rounded-full border border-white bg-neutral-50/80 text-neutral-500 backdrop-blur dark:border-black dark:bg-neutral-900/80">
-              <button
-                formAction={() => {
-                  const newState = updateImage(previousImageIndex.toString());
-                  updateURL(newState);
-                }}
-                aria-label="Previous product image"
-                className={buttonClassName}
-              >
-                <ArrowLeftIcon className="h-5" />
-              </button>
-              <div className="mx-1 h-6 w-px bg-neutral-500"></div>
-              <button
-                formAction={() => {
-                  const newState = updateImage(nextImageIndex.toString());
-                  updateURL(newState);
-                }}
-                aria-label="Next product image"
-                className={buttonClassName}
-              >
-                <ArrowRightIcon className="h-5" />
-              </button>
-            </div>
-          </div>
-        ) : null}
+        {images.length > 1 && (
+          <>
+            <button
+              onClick={() => {
+                const newState = updateImage(previousImageIndex.toString());
+                updateURL(newState);
+              }}
+              aria-label="Previous product image"
+              className={`${buttonClassName} left-4`}
+            >
+              <ChevronLeft className="h-6 w-6 text-gray-600" />
+            </button>
+            <button
+              onClick={() => {
+                const newState = updateImage(nextImageIndex.toString());
+                updateURL(newState);
+              }}
+              aria-label="Next product image"
+              className={`${buttonClassName} right-4`}
+            >
+              <ChevronRight className="h-6 w-6 text-gray-600" />
+            </button>
+          </>
+        )}
       </div>
 
-      {images.length > 1 ? (
-        <ul className="my-12 flex items-center justify-center gap-2 overflow-auto py-1 lg:mb-0">
-          {images.map((image, index) => {
-            const isActive = index === imageIndex;
+      {/* Gallery thumbnails */}
+      <div className="mt-4 flex justify-center space-x-2 overflow-x-auto">
+        {images.map((image, index) => (
+          <button
+            key={image.src}
+            onClick={() => {
+              const newState = updateImage(index.toString());
+              updateURL(newState);
+            }}
+            aria-label={`View product image ${index + 1}`}
+            className={`w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 ${
+              index === imageIndex ? 'ring-2 ring-black' : ''
+            }`}
+          >
+            <Image
+              src={image.src}
+              alt={image.altText}
+              width={64}
+              height={64}
+              className="object-cover w-full h-full"
+            />
+          </button>
+        ))}
+      </div>
 
-            return (
-              <li key={image.src} className="h-20 w-20">
-                <button
-                  formAction={() => {
-                    const newState = updateImage(index.toString());
-                    updateURL(newState);
-                  }}
-                  aria-label="Select product image"
-                  className="h-full w-full"
-                >
-                  <GridTileImage
-                    alt={image.altText}
-                    src={image.src}
-                    width={80}
-                    height={80}
-                    active={isActive}
-                  />
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      ) : null}
-    </form>
+      {/* Navigation dots */}
+      <div className="mt-4 flex justify-center">
+        {images.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => {
+              const newState = updateImage(index.toString());
+              updateURL(newState);
+            }}
+            aria-label={`View product image ${index + 1}`}
+            className={`mx-1 h-2 w-2 rounded-full transition-all duration-200 ${
+              index === imageIndex ? 'bg-gray-800 scale-125' : 'bg-gray-300'
+            }`}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
