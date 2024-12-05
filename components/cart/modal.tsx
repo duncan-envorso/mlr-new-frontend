@@ -125,7 +125,7 @@ export default function CartModal() {
                                     height={64}
                                     alt={
                                       item.merchandise.product.featuredImage.altText ||
-                                      item.merchandise.product.title || 'Image of product'
+                                      item.merchandise.product.title
                                     }
                                     src={item.merchandise.product.featuredImage.url}
                                   />

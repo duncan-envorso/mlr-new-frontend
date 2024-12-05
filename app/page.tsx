@@ -1,11 +1,11 @@
 import { fetchTeamData, getMatchData, getNewsPosts } from '@/actions'
 import HeroSectionTwo from '@/components/home/herosection2'
 import NewsSection from '@/components/home/LatestNews'
-import MatchCarousel from '@/components/home/MatchCarousel'
-import { SponsorsSection } from '@/components/home/Sponsors'
+import { PartnerSection } from '@/components/home/Partners'
 import TeamRosterSection from '@/components/home/TeamRosterSection'
 import { UpcomingMatchesCarousel } from '@/components/home/UpcomingMatches'
 import { upcomingMatchesData } from '@/mockdata'
+import { sponsorsData } from '@/partners'
 import { Suspense } from 'react'
 
 async function getHeroData() {
@@ -41,8 +41,8 @@ export default async function Home() {
       <Suspense>
         <TeamRosterSection apiFormattedData={apiFormattedData} />
       </Suspense>
-      <SponsorsSection />
-      <MatchCarousel matches={matches.pastMatchesData} />
+      <PartnerSection sponsorsData={sponsorsData} />
+      {/* <MatchCarousel matches={matches.pastMatchesData} /> */}
     
       </div>
   )

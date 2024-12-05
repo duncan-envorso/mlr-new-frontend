@@ -1,14 +1,14 @@
-// Header.tsx
 'use client'
 
 import { Button } from "@/components/ui/button"
 import { currentTeamConfig } from "@/config/teamConfig"
-import { fanCentralMenu, menuItems, socialIcons } from "@/lib/data"
+import { fanCentralMenu, menuItems, socialIcons, ticketsMenu } from "@/lib/data"
 import { AnimatePresence, motion } from "framer-motion"
 import { ChevronDown, Menu, X } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
+import CartModal from "../cart/modal"
 import MLRTeamsBar from "../TeamsBar"
 import MobileMenu from "./MobileMenu"
 import { TeamDropdown } from "./TeamDropDown"
@@ -17,6 +17,7 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const [isFanCentralOpen, setIsFanCentralOpen] = useState(false)
+  const [isTicketsOpen, setIsTicketsOpen] = useState(false)
   const [activeMenuItem, setActiveMenuItem] = useState(0)
   const [isTeamDropdownOpen, setIsTeamDropdownOpen] = useState(false)
   const [activeTeamMenuItem, setActiveTeamMenuItem] = useState(0)
@@ -33,12 +34,16 @@ export default function Header() {
     const handleClickOutside = (event: MouseEvent) => {
       const fanCentralDropdown = document.getElementById('fan-central-dropdown')
       const teamDropdown = document.getElementById('team-dropdown')
+      const ticketsDropdown = document.getElementById('tickets-dropdown')
 
       if (fanCentralDropdown && !fanCentralDropdown.contains(event.target as Node)) {
         setIsFanCentralOpen(false)
       }
       if (teamDropdown && !teamDropdown.contains(event.target as Node)) {
         setIsTeamDropdownOpen(false)
+      }
+      if (ticketsDropdown && !ticketsDropdown.contains(event.target as Node)) {
+        setIsTicketsOpen(false)
       }
     }
 
@@ -49,7 +54,39 @@ export default function Header() {
   const handleNavigate = () => {
     setIsFanCentralOpen(false)
     setIsTeamDropdownOpen(false)
+    setIsTicketsOpen(false)
   }
+
+  const TicketsDropdown = () => (
+    <motion.div
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      className="absolute top-full left-0 mt-4 w-[300px] bg-white rounded-lg shadow-lg overflow-hidden z-50"
+    >
+      <div className="p-4">
+        <div className="space-y-1">
+          {ticketsMenu.map((menuItem) => (
+            <Link
+              key={menuItem.name}
+              href={menuItem.url}
+              className="flex items-start p-3 hover:bg-gray-50 rounded-lg transition-colors group"
+              onClick={handleNavigate}
+            >
+              <div>
+                <h3 className="font-bold text-primary group-hover:text-accent transition-colors">
+                  {menuItem.name}
+                </h3>
+                <p className="text-sm text-gray-600 mt-1">
+                  {menuItem.description}
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
 
   const FanCentralDropdown = () => (
     <motion.div
@@ -164,7 +201,9 @@ export default function Header() {
                       item.name === "FAN CENTRAL" 
                         ? "fan-central-dropdown" 
                         : item.name === "TEAM" 
-                        ? "team-dropdown" 
+                        ? "team-dropdown"
+                        : item.name === "BUY TICKETS"
+                        ? "tickets-dropdown"
                         : undefined
                     }
                   >
@@ -176,9 +215,15 @@ export default function Header() {
                           if (item.name === "FAN CENTRAL") {
                             setIsFanCentralOpen(!isFanCentralOpen)
                             setIsTeamDropdownOpen(false)
+                            setIsTicketsOpen(false)
                           } else if (item.name === "TEAM") {
                             setIsTeamDropdownOpen(!isTeamDropdownOpen)
                             setIsFanCentralOpen(false)
+                            setIsTicketsOpen(false)
+                          } else if (item.name === "BUY TICKETS") {
+                            setIsTicketsOpen(!isTicketsOpen)
+                            setIsFanCentralOpen(false)
+                            setIsTeamDropdownOpen(false)
                           }
                         }}
                       >
@@ -186,7 +231,8 @@ export default function Header() {
                         <ChevronDown
                           className={`h-4 w-4 transition-transform duration-300 ${
                             (item.name === "FAN CENTRAL" && isFanCentralOpen) ||
-                            (item.name === "TEAM" && isTeamDropdownOpen)
+                            (item.name === "TEAM" && isTeamDropdownOpen) ||
+                            (item.name === "BUY TICKETS" && isTicketsOpen)
                               ? 'rotate-180'
                               : ''
                           }`}
@@ -217,6 +263,11 @@ export default function Header() {
                           />
                         </div>
                       )}
+                      {item.name === "BUY TICKETS" && item.hasDropdown && isTicketsOpen && (
+                        <div className="absolute top-full left-0">
+                          <TicketsDropdown />
+                        </div>
+                      )}
                     </AnimatePresence>
                   </div>
                 ))}
@@ -224,6 +275,7 @@ export default function Header() {
             </nav>
 
             <div className="hidden md:flex items-center justify-end space-x-4 z-10 ml-24">
+              <CartModal />
               {socialIcons.map(({ Icon, url, label }) => (
                 <Link href={url as string} key={label} target="_blank" rel="noopener noreferrer">
                   <Button
@@ -258,12 +310,6 @@ export default function Header() {
         <MobileMenu isMenuOpen={isMenuOpen} />
         <MLRTeamsBar />
       </motion.header>
-      
-      {/* Add spacing to account for fixed header */}
-  
-      
-      {/* New MLR Teams Bar */}
-     
     </>
   )
 }

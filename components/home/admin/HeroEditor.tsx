@@ -66,7 +66,8 @@ export function HeroEditor({ initialData, onSave, onClose }: HeroEditorProps) {
       <div className="flex items-center justify-between p-6 border-b border-accent bg-primary/10">
         <h2 className="text-3xl font-bold font-h1 flex items-center text-primary-foreground">
           <Pencil className="mr-3 h-8 w-8 text-accent" />
-          Edit Hero Section
+          Edit Home Carousel 
+
         </h2>
         <Button
           variant="ghost"

@@ -1,5 +1,5 @@
 import { CartProvider } from '@/components/cart/cart-context';
-import CartModal from '@/components/cart/modal';
+import ClientPopup from '@/components/clientPopUp';
 import Header from '@/components/home/Header';
 import Footer from '@/components/layout/footer';
 import { WelcomeToast } from '@/components/welcome-toast';
@@ -59,7 +59,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           <Header />
           <main className="mt-20">
             <div className="fixed bottom-4 right-4 z-[60]">
-              <CartModal />
+              <ClientPopup/>
             </div>
             {children}
           </main>

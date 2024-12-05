@@ -8,7 +8,8 @@ export const teamConfigs: Record<string, TeamConfig> = {
       facebook: 'https://www.facebook.com/SeawolvesRugby/',
       instagram: 'https://www.instagram.com/seawolvesrugby/',
       twitter: 'https://twitter.com/SeawolvesRugby',
-      youtube: 'https://www.instagram.com/seawolvesrugby/'
+      youtube: 'https://www.youtube.com/@seattleseawolvesrugby/',
+      tiktok: 'https://www.tiktok.com/@seawolvesrugby'
     
     },
     appStoreLinks: {

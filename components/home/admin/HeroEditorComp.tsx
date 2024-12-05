@@ -12,6 +12,7 @@ export default function MockHeroEditor() {
   const handleSave = async (updatedData: typeof mockHeroData) => {
     console.log('Saved Data:', updatedData); // Replace with actual save logic if needed
     setHeroData(updatedData); // Update the state with new data
+    console.log('Editor closed',heroData )
   };
 
   return (

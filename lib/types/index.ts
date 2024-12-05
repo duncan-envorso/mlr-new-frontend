@@ -101,6 +101,7 @@ export interface TeamConfig {
     instagram: string;
     twitter: string;
     youtube?: string;
+    tiktok?: string;
   };
   appStoreLinks: {
     ios: string;
@@ -289,3 +290,13 @@ export type UpcomingMatchData = {
 
 // Array type for all matches
 export type Matches = UpcomingMatchData[];
+
+// types/index.ts
+export interface UserPreferences {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  birthday?: string;
+  gender?: string;
+  neverShow?: boolean;
+}

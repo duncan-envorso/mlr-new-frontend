@@ -5,6 +5,7 @@ import {
   CarouselNext,
   CarouselPrevious
 } from '@/components/ui/carousel';
+import { useMediaQuery } from '@/hooks/use-media-query';
 import { Sponsor } from '@/lib/types';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
@@ -15,6 +16,7 @@ interface SponsorCarouselProps {
 
 const SponsorCarousel: React.FC<SponsorCarouselProps> = ({ sponsors = [] }) => {
   const [sortedSponsors, setSortedSponsors] = useState<Sponsor[]>([]);
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
 
   useEffect(() => {
     if (!sponsors || sponsors.length === 0) {
@@ -38,19 +40,19 @@ const SponsorCarousel: React.FC<SponsorCarouselProps> = ({ sponsors = [] }) => {
             align: "start",
             loop: true,
             slidesToScroll: 1,
-            containScroll: "keepSnaps"
+            containScroll: "trimSnaps"
           }}
           orientation="vertical"
           className="w-[240px]"
         >
-          <CarouselContent className="-mt-4" style={{ height: '``3``60px' }}>
+          <CarouselContent className="-mt-4" style={{ height: '360px' }}>
             {sortedSponsors.map((sponsor) => (
               <CarouselItem
                 key={`desktop-${sponsor.name}`}
                 className="pt-4 h-[120px]"
                 style={{ flex: '0 0 33.333%' }}
               >
-                <div className="relative h-[100px] rounded-lg overflow-hidden border bg-white/10 backdrop-blur-sm">
+                <div className="relative h-[100px] border rounded-lg overflow-hidden  shadow-md bg-secondary/50">
                   <div className="absolute inset-0 flex items-center justify-center p-4">
                     <a
                       href={sponsor.sponsorUrl}
@@ -72,8 +74,12 @@ const SponsorCarousel: React.FC<SponsorCarouselProps> = ({ sponsors = [] }) => {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="absolute -top-12 border-none right-4 transform text-white rotate-90" />
-          <CarouselNext className="absolute -bottom-12 right-4 border-none transform text-white rotate-90" />
+          {sortedSponsors.length > 3 && (
+            <>
+              <CarouselPrevious className="absolute -top-12 border-none right-4 transform text-white rotate-90" />
+              <CarouselNext className="absolute -bottom-12 right-4 border-none transform text-white rotate-90" />
+            </>
+          )}
         </Carousel>
       </div>
     </div>
@@ -117,8 +123,6 @@ const SponsorCarousel: React.FC<SponsorCarouselProps> = ({ sponsors = [] }) => {
                 </div>
               </div>
             </CarouselItem>
-
-
           ))}
         </CarouselContent>
         <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2  text-white border-none" />
@@ -129,10 +133,10 @@ const SponsorCarousel: React.FC<SponsorCarouselProps> = ({ sponsors = [] }) => {
 
   return (
     <>
-      {DesktopCarousel}
-      {MobileCarousel}
+      {isDesktop ? DesktopCarousel : MobileCarousel}
     </>
   );
 };
 
 export default SponsorCarousel;
+

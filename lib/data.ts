@@ -133,20 +133,58 @@ export const teamMenu = [
   }
 ];
 
+export const ticketsMenu = [
+  {
+    name: "2025 SEASON TICKETS",
+    url: "/tickets/2025-season-tickets",
+    description: "Full season ticket packages"
+  },
+  {
+    name: "2025 HALF SEASON TICKETS",
+    url: "/tickets/half-season-tickets",
+    description: "Half season ticket packages"
+  },
+  {
+    name: "GROUP TICKETS",
+    url: "/tickets/group-tickets",
+    description: "Group ticket options"
+  },
+  {
+    name: "2025 SINGLE MATCH TICKETS",
+    url: "https://www.axs.com/series/25516/seattle-seawolves-tickets?skin=seawolves",
+    description: "Individual match tickets"
+  },
+  {
+    name: "SEAWOLVES CLUB",
+    url: "/tickets/seawolves-club/",
+    description: "Premium seating and experiences"
+  }
+];
+
+
 export const menuItems = [
-  { name: "BUY TICKETS", url: "/tickets" },
+  { 
+    name: "BUY TICKETS", 
+    url: "/tickets", 
+    hasDropdown: true,
+    dropdownItems: ticketsMenu
+  },
   { name: "TEAM SHOP", url: "/shop" },
   { name: "SCHEDULE", url: "/schedule" },
   { name: "FAN CENTRAL", url: "/fan-central", hasDropdown: true },
   { name: "PATHWAY", url: "/pathway" },
   { name: "NEWS", url: "/news" },
-  { name: "TEAM", url: "/roster" , hasDropdown: true},
+  { name: "TEAM", url: "/roster", hasDropdown: true },
 ];
+
+import { Music, Youtube } from 'lucide-react';
 
 export const socialIcons = [
   { Icon: Facebook, url: currentTeamConfig?.socialMedia.facebook, label: "Facebook" },
   { Icon: Instagram, url: currentTeamConfig?.socialMedia.instagram, label: "Instagram" },
   { Icon: Twitter, url: currentTeamConfig?.socialMedia.twitter, label: "Twitter" },
+  { Icon: Youtube, url: currentTeamConfig?.socialMedia.youtube, label: "YouTube" },
+  { Icon: Music, url: currentTeamConfig?.socialMedia.tiktok, label: "TikTok" },
 ];
 
 export const menuIcons = {

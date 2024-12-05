@@ -1,4 +1,7 @@
-import { HeroData, MatchResponse, NewsPost, NewsPostList, TeamData } from 'lib/types';
+'use server'
+
+import { HeroData, MatchResponse, NewsPost, NewsPostList, TeamData, UserPreferences } from 'lib/types';
+import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { NextResponse } from 'next/server';
 import { z } from "zod";
@@ -190,14 +193,9 @@ async function getStandingsData() {
   return res.json();
 }
 
-export class MatchFetchError extends Error {
-  constructor(message: string, public readonly statusCode: number) {
-    super(message);
-    this.name = 'MatchFetchError';
-  }
-}
 
-export async function getMatchById(id: string): Promise<MatchResponse> {
+
+export async function getMatchById(id: string) {
   try {
     // Validate the match ID
 
@@ -221,10 +219,7 @@ export async function getMatchById(id: string): Promise<MatchResponse> {
       if (response.status === 404) {
         notFound();
       }
-      throw new MatchFetchError(
-        `Failed to fetch match data: ${response.statusText}`,
-        response.status
-      );
+      
     }
 
     // Parse the response
@@ -233,16 +228,13 @@ export async function getMatchById(id: string): Promise<MatchResponse> {
     return data;
   } catch (error) {
     if (error instanceof z.ZodError) {
-      throw new MatchFetchError('Invalid match ID format', 400);
+      console.log(error)
     }
 
-    if (error instanceof MatchFetchError) {
-      throw error;
-    }
-
+  
     // Log unexpected errors but don't expose details to client
     console.error('Unexpected error fetching match:', error);
-    throw new MatchFetchError('Failed to fetch match data', 500);
+   
   }
 }
 
@@ -274,3 +266,30 @@ async function fetchPlayer(id: string) {
 }
 
 export { fetchPlayer };
+
+
+
+
+export async function saveUserPreferences(data: UserPreferences) {
+  const cookieStore = await cookies();
+  
+  cookieStore.set('userPreferences', JSON.stringify(data), {
+    maxAge: 60 * 60 * 24 * 365, // 1 year
+    path: '/',
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    sameSite: 'strict'
+  });
+}
+
+export async function getUserPreferences() {
+  const cookieStore = await cookies();
+  const prefs = cookieStore.get('userPreferences');
+  return prefs ? JSON.parse(prefs.value) : null;
+}
+
+export async function clearUserPreferences() {
+  const cookieStore = await cookies();
+  cookieStore.delete('userPreferences');
+  
+}
