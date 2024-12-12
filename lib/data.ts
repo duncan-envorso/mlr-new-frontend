@@ -1,5 +1,5 @@
 import { currentTeamConfig } from "@/config/teamConfig";
-import { Briefcase, Building2, Calendar, Facebook, Handshake, Home, Info, Instagram, MapPin, Trophy, Tv2, Twitter, Users, Wallpaper } from "lucide-react";
+import { Briefcase, Building2, Calendar, Handshake, Home, Info, MapPin, Trophy, Tv2, Users, Wallpaper } from "lucide-react";
 
 
 export const teams = [
@@ -177,14 +177,34 @@ export const menuItems = [
   { name: "TEAM", url: "/roster", hasDropdown: true },
 ];
 
-import { Music, Youtube } from 'lucide-react';
+
 
 export const socialIcons = [
-  { Icon: Facebook, url: currentTeamConfig?.socialMedia.facebook, label: "Facebook" },
-  { Icon: Instagram, url: currentTeamConfig?.socialMedia.instagram, label: "Instagram" },
-  { Icon: Twitter, url: currentTeamConfig?.socialMedia.twitter, label: "Twitter" },
-  { Icon: Youtube, url: currentTeamConfig?.socialMedia.youtube, label: "YouTube" },
-  { Icon: Music, url: currentTeamConfig?.socialMedia.tiktok, label: "TikTok" },
+  {
+    url: currentTeamConfig?.socialMedia.facebook,
+    label: "Facebook",
+    network: "facebook"
+  },
+  {
+    url: currentTeamConfig?.socialMedia.instagram,
+    label: "Instagram",
+    network: "instagram"
+  },
+  {
+    url: currentTeamConfig?.socialMedia.twitter,
+    label: "Twitter",
+    network: "x"
+  },
+  {
+    url: currentTeamConfig?.socialMedia.youtube,
+    label: "YouTube",
+    network: "youtube"
+  },
+  {
+    url: currentTeamConfig?.socialMedia.tiktok,
+    label: "TikTok",
+    network: "tiktok"
+  }
 ];
 
 export const menuIcons = {

@@ -1,72 +1,101 @@
-import Image from 'next/image';
-import Link from 'next/link';
+import Image from "next/image";
+import Link from "next/link";
 
-export default function TicketsPage() {
-  const ticketTypes = [
-    {
-      title: '2024 Season Tickets',
-      image:
-        'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Season-Tickets2-3OgBgkgm5GukmCFFY4DFOGtl1mei8M.webp',
-      alt: '2024 Tickets on sale now',
-      link: 'https://www.chicagohounds.com/season-tickets/'
-    },
-    {
-      title: 'Half-Season Tickets',
-      image:
-        'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/halfseasonTickets-1-UEYtleVkqMecyq8TLNqY6wqlfe0z6U.webp',
-      alt: 'Half-Season Tickets',
-      link: 'https://vivenu.com/event/chicago-hounds-half-season-tickets-4ntb2b'
-    },
-    {
-      title: 'Single Game Tickets',
-      image:
-        'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/SingleGameTicketsHeader-0mcGkNdZ6jQR6EF2lXLcdmHZ8wQDLz.webp',
-      alt: 'Single Game Tickets',
-      link: 'https://www.chicagohounds.com/single-game-tickets/'
-    }
-  ];
+const ticketOptions = [
+  {
+    href: "https://seawolves.rugby/2025-season-tickets/",
+    src: "/tickets/2025-Ticket-Page-Buttons.png",
+    alt: "2025 Season Tickets",
+    width: 1080,
+    height: 1080,
+    external: false
+  },
+  {
+    href: "https://seawolves.rugby/half-season-ticket-deposit/",
+    src: "/tickets/2025-Ticket-Page-Buttons-1.png",
+    alt: "Half Season Tickets",
+    width: 1080,
+    height: 1080,
+    external: false
+  },
+  {
+    href: "/group-tickets",
+    src: "/tickets/group.jpg",
+    alt: "Group Experience",
+    width: 800,
+    height: 800,
+    external: false
+  },
+  {
+    href: "https://www.axs.com/series/25516/seattle-seawolves-tickets?skin=seawolves",
+    src: "/tickets/Ticket-Page-Buttons.png",
+    alt: "Single Match Tickets",
+    width: 800,
+    height: 800,
+    external: true
+  },
+  {
+    href: "/seawolves.rugby/seawolves-club/",
+    src: "/tickets/Ticket-Page-Buttons-1.png",
+    alt: "Seawolves Club",
+    width: 800,
+    height: 800,
+    external: true
+  },
+  {
+    href: "https://fanaccount.axs.com/?skin=seawolves",
+    src: "/tickets/fan-account.jpg",
+    alt: "Seawolves Fan Account",
+    width: 800,
+    height: 800,
+    external: true
+  }
+];
 
+export default function TicketsSection() {
   return (
-    <div className="min-h-screen bg-slate-200 text-foreground">
-      <div className="relative h-[50vh] w-full">
-        <Image
-          src="https://www.chicagohounds.com/wp-content/uploads/sites/18/2023/11/Ticketsonsalenow.png"
-          alt="2024 Tickets on sale now"
-          fill
-          className="object-cover"
-        />
-      </div>
-      <main className="w-full">
-        {ticketTypes.map((ticket, index) => (
-          <TicketSection
-            key={index}
-            title={ticket.title}
-            image={ticket.image}
-            alt={ticket.alt}
-            link={ticket.link}
-          />
+    <div className="max-w-7xl mx-auto px-4 py-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        {ticketOptions.map((option) => (
+          <Link
+            key={option.alt}
+            href={option.href}
+            className="aspect-square relative block overflow-hidden rounded-lg"
+            {...(option.external && {
+              target: "_blank",
+              rel: "noopener noreferrer"
+            })}
+          >
+            <Image
+              src={option.src}
+              alt={option.alt}
+              width={option.width}
+              height={option.height}
+              className="object-cover hover:scale-105 transition-transform duration-300"
+              priority={option.alt === "2025 Season Tickets"}
+            />
+          </Link>
         ))}
-      </main>
-    </div>
-  );
-}
+      </div>
 
-function TicketSection({
-  title,
-  image,
-  alt,
-  link
-}: {
-  title: string;
-  image: string;
-  alt: string;
-  link: string;
-}) {
-  return (
-    <div className=" relative m-10  h-[90vh] p-10">
-      <Link href={link} className=" h-full w-full">
-        <Image src={image} alt={alt} fill className="object-contain" />
-      </Link>
+      <div className="text-center space-y-4">
+        <p className="text-gray-700">
+          Need help? Contact us via{" "}
+          <Link href="mailto:info@seawolves.rugby" className="text-blue-600 hover:underline">
+            email
+          </Link>{" "}
+          or call us at{" "}
+          <Link href="tel:206-219-1504" className="text-blue-600 hover:underline">
+            206-219-1504
+          </Link>
+        </p>
+        <Link
+          href="/axs-mobile-id-faq"
+          className="inline-block px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          AXS Mobile ID FAQ
+        </Link>
+      </div>
     </div>
   );
 }

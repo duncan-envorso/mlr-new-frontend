@@ -1,21 +1,118 @@
 import { Button } from "@/components/ui/button";
-import { fanCentralMenu, menuIcons, menuItems, socialIcons, teams } from '@/lib/data';
+import { fanCentralMenu, menuItems, socialIcons, teamMenu, ticketsMenu } from '@/lib/data';
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
+import { SocialIcon } from "react-social-icons";
 
-export default function MobileMenu({ isMenuOpen }: { isMenuOpen: boolean }) {
-  const [expandedMobileMenus, setExpandedMobileMenus] = useState<string[]>([])
+export default function MobileMenu({
+  isMenuOpen,
+  setIsMenuOpen
+}: {
+  isMenuOpen: boolean;
+  setIsMenuOpen: (isOpen: boolean) => void;
+}) {
+  const [expandedMobileMenus, setExpandedMobileMenus] = useState<string[]>([]);
+  const [activeMenuItem, setActiveMenuItem] = useState(0);
 
   const toggleMobileSubmenu = (menuName: string) => {
     setExpandedMobileMenus(prev =>
       prev.includes(menuName)
         ? prev.filter(item => item !== menuName)
         : [...prev, menuName]
-    )
-  }
+    );
+  };
+
+  const handleNavigate = () => {
+    setIsMenuOpen(false);
+    setExpandedMobileMenus([]);
+  };
+
+  const renderSubmenuContent = (itemName: string) => {
+    switch (itemName) {
+      case 'BUY TICKETS':
+        return (
+          <div className="space-y-1">
+            {ticketsMenu.map((menuItem) => (
+              <Link
+                key={menuItem.name}
+                href={menuItem.url}
+                className="block p-3 hover:bg-white/10 rounded-lg transition-colors"
+                onClick={handleNavigate}
+              >
+                <div>
+                  <h3 className="font-bold text-white">
+                    {menuItem.name}
+                  </h3>
+                  <p className="text-sm text-white/70 mt-1">
+                    {menuItem.description}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        );
+      case 'FAN CENTRAL':
+        return (
+          <div className="space-y-1">
+            {fanCentralMenu.map((menuItem) => {
+              const Icon = menuItem.icon;
+              return (
+                <Link
+                  key={menuItem.name}
+                  href={menuItem.url}
+                  className="block p-3 hover:bg-white/10 rounded-lg transition-colors"
+                  onClick={handleNavigate}
+                >
+                  <div className="flex items-center gap-3">
+                    {Icon && <Icon className="h-4 w-4 text-white" />}
+                    <div>
+                      <h3 className="font-bold text-white">
+                        {menuItem.name}
+                      </h3>
+                      <p className="text-sm text-white/70 mt-1">
+                        {menuItem.description}
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        );
+      case 'TEAM':
+        return (
+          <div className="space-y-1">
+            {teamMenu.map((menuItem) => {
+              const Icon = menuItem.icon;
+              return (
+                <Link
+                  key={menuItem.name}
+                  href={menuItem.url}
+                  className="block p-3 hover:bg-white/10 rounded-lg transition-colors"
+                  onClick={handleNavigate}
+                >
+                  <div className="flex items-center gap-3">
+                    {Icon && <Icon className="h-4 w-4 text-white" />}
+                    <div>
+                      <h3 className="font-bold text-white">
+                        {menuItem.name}
+                      </h3>
+                      <p className="text-sm text-white/70 mt-1">
+                        {menuItem.description}
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -27,7 +124,7 @@ export default function MobileMenu({ isMenuOpen }: { isMenuOpen: boolean }) {
           transition={{ duration: 0.3 }}
           className="bg-[#1C2841] md:hidden overflow-y-auto max-h-[calc(100vh-4rem)]"
         >
-          <nav className="container mx-auto flex flex-col px-4 py-2">
+          <nav className="container mx-auto flex flex-col px-4 py-4 space-y-2">
             {menuItems.map((item, index) => (
               <motion.div
                 key={item.name}
@@ -36,15 +133,16 @@ export default function MobileMenu({ isMenuOpen }: { isMenuOpen: boolean }) {
                 transition={{ delay: index * 0.1 }}
               >
                 {item.hasDropdown ? (
-                  <div>
+                  <div className="space-y-2">
                     <Button
                       variant="ghost"
-                      className="w-full justify-start text-white hover:bg-white/10 hover:text-white transition-colors duration-300 flex items-center gap-1"
+                      className="w-full justify-between text-white hover:bg-white/10 hover:text-white transition-colors duration-300 flex items-center"
                       onClick={() => toggleMobileSubmenu(item.name)}
                     >
                       {item.name}
                       <ChevronDown
-                        className={`h-4 w-4 transition-transform ${expandedMobileMenus.includes(item.name) ? 'rotate-180' : ''}`}
+                        className={`h-4 w-4 transition-transform duration-300 ${expandedMobileMenus.includes(item.name) ? 'rotate-180' : ''
+                          }`}
                       />
                     </Button>
                     <AnimatePresence>
@@ -53,28 +151,16 @@ export default function MobileMenu({ isMenuOpen }: { isMenuOpen: boolean }) {
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: "auto" }}
                           exit={{ opacity: 0, height: 0 }}
-                          className="pl-4 space-y-2 mt-2"
+                          transition={{ duration: 0.2 }}
+                          className="pl-4"
                         >
-                          {fanCentralMenu.map((menuItem) => {
-                            const Icon = menuIcons[menuItem.name as keyof typeof menuIcons];
-                            return (
-                              <Link key={menuItem.name} href={menuItem.url}>
-                                <Button
-                                  variant="ghost"
-                                  className="w-full justify-start text-white hover:bg-white/10 hover:text-white transition-colors duration-300 text-sm flex items-center gap-2"
-                                >
-                                  {Icon && <Icon className="h-4 w-4" />}
-                                  {menuItem.name}
-                                </Button>
-                              </Link>
-                            );
-                          })}
+                          {renderSubmenuContent(item.name)}
                         </motion.div>
                       )}
                     </AnimatePresence>
                   </div>
                 ) : (
-                  <Link href={item.url}>
+                  <Link href={item.url} onClick={handleNavigate}>
                     <Button
                       variant="ghost"
                       className="w-full justify-start text-white hover:bg-white/10 hover:text-white transition-colors duration-300"
@@ -89,67 +175,22 @@ export default function MobileMenu({ isMenuOpen }: { isMenuOpen: boolean }) {
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: (menuItems.length + 1) * 0.1 }}
-              className="flex justify-center space-x-4 mt-4"
+              transition={{ delay: menuItems.length * 0.1 }}
+              className="flex justify-center space-x-4 py-4 border-t border-white/10"
             >
-              {socialIcons.map(({ Icon, url, label }) => (
-                <Link
-                  href={url as string}
-                  key={label}
+              {socialIcons.map((social) => (
+                <SocialIcon
+                  key={social.label}
+                  url={social.url || "#"}
+                  network={social.network}
+                  style={{ height: 35, width: 35 }}
+                  className="hover:scale-110 transition-transform"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-white hover:text-white/80 transition-colors"
-                >
-                  <Icon className="h-5 w-5" aria-label={label} />
-                </Link>
-              ))}
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: (menuItems.length + 2) * 0.1 }}
-              className="mt-4 pt-4 border-t border-white/10"
-            >
-              <Button
-                variant="ghost"
-                className="w-full justify-start text-white hover:bg-white/10 hover:text-white transition-colors duration-300 flex items-center gap-1"
-                onClick={() => toggleMobileSubmenu('MLR Teams')}
-              >
-                MLR Teams
-                <ChevronDown
-                  className={`h-4 w-4 transition-transform ${expandedMobileMenus.includes('MLR Teams') ? 'rotate-180' : ''}`}
+                  bgColor="transparent"
+                  fgColor="white"
                 />
-              </Button>
-              <AnimatePresence>
-                {expandedMobileMenus.includes('MLR Teams') && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    className="space-y-1 mt-2"
-                  >
-                    {teams.map((team) => (
-                      <a
-                        key={team.name}
-                        href={team.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center p-2 hover:bg-white/10 rounded-lg transition-colors text-white"
-                      >
-                        <Image
-                          src={team.logo}
-                          alt={`${team.name} logo`}
-                          width={24}
-                          height={24}
-                          className="mr-3"
-                        />
-                        <span className="text-sm">{team.name}</span>
-                      </a>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              ))}
             </motion.div>
           </nav>
         </motion.div>

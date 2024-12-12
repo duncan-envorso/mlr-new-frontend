@@ -8,6 +8,7 @@ import { ChevronDown, Menu, X } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
+import { SocialIcon } from "react-social-icons"
 import CartModal from "../cart/modal"
 import MLRTeamsBar from "../TeamsBar"
 import MobileMenu from "./MobileMenu"
@@ -198,13 +199,13 @@ export default function Header() {
                     key={item.name}
                     className="relative"
                     id={
-                      item.name === "FAN CENTRAL" 
-                        ? "fan-central-dropdown" 
-                        : item.name === "TEAM" 
-                        ? "team-dropdown"
-                        : item.name === "BUY TICKETS"
-                        ? "tickets-dropdown"
-                        : undefined
+                      item.name === "FAN CENTRAL"
+                        ? "fan-central-dropdown"
+                        : item.name === "TEAM"
+                          ? "team-dropdown"
+                          : item.name === "BUY TICKETS"
+                            ? "tickets-dropdown"
+                            : undefined
                     }
                   >
                     {item.hasDropdown ? (
@@ -229,13 +230,12 @@ export default function Header() {
                       >
                         {item.name}
                         <ChevronDown
-                          className={`h-4 w-4 transition-transform duration-300 ${
-                            (item.name === "FAN CENTRAL" && isFanCentralOpen) ||
-                            (item.name === "TEAM" && isTeamDropdownOpen) ||
-                            (item.name === "BUY TICKETS" && isTicketsOpen)
+                          className={`h-4 w-4 transition-transform duration-300 ${(item.name === "FAN CENTRAL" && isFanCentralOpen) ||
+                              (item.name === "TEAM" && isTeamDropdownOpen) ||
+                              (item.name === "BUY TICKETS" && isTicketsOpen)
                               ? 'rotate-180'
                               : ''
-                          }`}
+                            }`}
                         />
                       </Button>
                     ) : (
@@ -257,9 +257,9 @@ export default function Header() {
                       )}
                       {item.name === "TEAM" && item.hasDropdown && isTeamDropdownOpen && (
                         <div className="absolute top-full left-1/2 -translate-x-1/2">
-                          <TeamDropdown 
-                            handleNavigate={handleNavigate} 
-                            setActiveTeamMenuItem={setActiveTeamMenuItem} 
+                          <TeamDropdown
+                            handleNavigate={handleNavigate}
+                            setActiveTeamMenuItem={setActiveTeamMenuItem}
                           />
                         </div>
                       )}
@@ -276,17 +276,18 @@ export default function Header() {
 
             <div className="hidden md:flex items-center justify-end space-x-4 z-10 ml-24">
               <CartModal />
-              {socialIcons.map(({ Icon, url, label }) => (
-                <Link href={url as string} key={label} target="_blank" rel="noopener noreferrer">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-white hover:bg-white/10 transition-colors duration-300"
-                    aria-label={label}
-                  >
-                    <Icon className="h-5 w-5" />
-                  </Button>
-                </Link>
+              {socialIcons.map((social) => (
+                <SocialIcon
+                  key={social.label}
+                  url={social.url || "#"}
+                  network={social.network}
+                  style={{ height: 35, width: 35 }}
+                  className="hover:scale-110 transition-transform"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  bgColor="transparent"
+                  fgColor="white"
+                />
               ))}
             </div>
 
@@ -307,7 +308,7 @@ export default function Header() {
           />
         </div>
 
-        <MobileMenu isMenuOpen={isMenuOpen} />
+        <MobileMenu setIsMenuOpen={setIsMenuOpen} isMenuOpen={isMenuOpen} />
         <MLRTeamsBar />
       </motion.header>
     </>

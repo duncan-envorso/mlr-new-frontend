@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { HeroData, TeamConfig } from '@/lib/types';
-import { Play } from 'lucide-react';
+import { Download } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 type AppStoreProps = {
@@ -34,15 +34,17 @@ const AppStoreButtons = ({ currentTeamConfig, heroData }: AppStoreProps) => {
     };
 
     return (
+        <div className="w-[240px] mb-6">
         <Button
-            variant="outline"
-            size="lg"
-            onClick={handleAppStoreClick}
-            className={`font-body w-full rounded-full border-2 border-white bg-transparent px-8 py-6 text-lg font-semibold text-white sm:w-auto`}
+          variant="outline"
+          size="lg"
+          onClick={handleAppStoreClick}
+          className="w-full text-white hover:text-white border-white hover:bg-white/20"
         >
-            <Play className="mr-2 h-5 w-5" />
-           Download App
+          <Download className="mr-2 h-5 w-5" />
+          Download App
         </Button>
+      </div>
     );
 };
 

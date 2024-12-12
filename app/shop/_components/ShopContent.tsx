@@ -1,5 +1,4 @@
 'use client'
-
 import { currentTeamConfig } from "@/config/teamConfig";
 import { Menu, Product } from "@/lib/shopify/types";
 import Image from "next/image";
@@ -23,14 +22,12 @@ export default function ShopContent({ collections = [], menus = [] }: ShopConten
   
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* Navigation Menu */}
       <div className="mb-8">
         <NavigationMenuDemo menus={menus} />
       </div>
 
-      {/* Shop Banner */}
       {currentTeamConfig?.shopBanner && (
-        <div className="relative w-full h-auto md:h-64 mb-8 rounded-lg overflow-hidden">
+        <div className="relative w-full aspect-[16/9] md:h-64 mb-8 rounded-lg overflow-hidden">
           <Image
             src={currentTeamConfig.shopBanner}
             alt={`${currentTeamConfig.name} Shop Banner`}
@@ -44,11 +41,10 @@ export default function ShopContent({ collections = [], menus = [] }: ShopConten
       <div className="flex flex-col md:flex-row gap-4 mb-8">
         <SearchBar value={searchTerm} onChange={setSearchTerm} />
       </div>
-
       
       <Suspense fallback={<p>Loading shop content...</p>}>
-          <ProductCollectionsCarousel collections={collections} />
-        </Suspense>
+        <ProductCollectionsCarousel collections={collections} />
+      </Suspense>
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 import {
   Carousel,
   CarouselContent,
@@ -5,16 +6,21 @@ import {
   CarouselNext,
   CarouselPrevious
 } from '@/components/ui/carousel';
+import { currentTeamConfig } from '@/config/teamConfig';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { Sponsor } from '@/lib/types';
+import { Download } from 'lucide-react';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
+import AppStoreButtons from './appStoreButtons';
 
 interface SponsorCarouselProps {
   sponsors?: Sponsor[];
+  teamId?: string;
+  onSponsorsUpdate?: (sponsors: Sponsor[]) => void;
 }
 
-const SponsorCarousel: React.FC<SponsorCarouselProps> = ({ sponsors = [] }) => {
+const SponsorCarousel: React.FC<SponsorCarouselProps> = ({ sponsors = [] }, heroData) => {
   const [sortedSponsors, setSortedSponsors] = useState<Sponsor[]>([]);
   const isDesktop = useMediaQuery("(min-width: 1024px)");
 
@@ -33,8 +39,15 @@ const SponsorCarousel: React.FC<SponsorCarouselProps> = ({ sponsors = [] }) => {
 
   // Desktop view
   const DesktopCarousel = (
-    <div className="hidden lg:flex justify-end w-full">
-      <div className="relative">
+    <div className="hidden lg:flex flex-col items-center w-full">
+      <div className="w-[240px] mb-6">
+        {currentTeamConfig && (
+          <AppStoreButtons currentTeamConfig={currentTeamConfig} heroData={heroData} />
+        )}
+
+      </div>
+
+      <div className="relative w-[240px]">
         <Carousel
           opts={{
             align: "start",
@@ -43,7 +56,7 @@ const SponsorCarousel: React.FC<SponsorCarouselProps> = ({ sponsors = [] }) => {
             containScroll: "trimSnaps"
           }}
           orientation="vertical"
-          className="w-[240px]"
+          className="w-full"
         >
           <CarouselContent className="-mt-4" style={{ height: '360px' }}>
             {sortedSponsors.map((sponsor) => (
@@ -52,7 +65,7 @@ const SponsorCarousel: React.FC<SponsorCarouselProps> = ({ sponsors = [] }) => {
                 className="pt-4 h-[120px]"
                 style={{ flex: '0 0 33.333%' }}
               >
-                <div className="relative h-[100px] border rounded-lg overflow-hidden  shadow-md bg-secondary/50">
+                <div className="relative h-[100px] border rounded-lg overflow-hidden shadow-md bg-secondary/50">
                   <div className="absolute inset-0 flex items-center justify-center p-4">
                     <a
                       href={sponsor.sponsorUrl}
@@ -88,6 +101,17 @@ const SponsorCarousel: React.FC<SponsorCarouselProps> = ({ sponsors = [] }) => {
   // Mobile view
   const MobileCarousel = (
     <div className="lg:hidden w-full mt-12">
+      <div className="w-full max-w-sm mx-auto mb-6">
+        <Button
+          variant="outline"
+          size="lg"
+          className="w-full text-white hover:text-white border-white hover:bg-white/20"
+        >
+          <Download className="mr-2 h-5 w-5" />
+          Download App
+        </Button>
+      </div>
+
       <Carousel
         opts={{
           align: "start",
@@ -101,7 +125,7 @@ const SponsorCarousel: React.FC<SponsorCarouselProps> = ({ sponsors = [] }) => {
           {sortedSponsors.map((sponsor) => (
             <CarouselItem
               key={`mobile-${sponsor.name}`}
-              className="pl-4 basis-1/2 "
+              className="pl-4 basis-1/2"
             >
               <div className="relative h-[100px] rounded-lg overflow-hidden border border-white/30 bg-white/10 backdrop-blur-sm">
                 <div className="absolute inset-0 flex items-center justify-center p-4">
@@ -125,8 +149,8 @@ const SponsorCarousel: React.FC<SponsorCarouselProps> = ({ sponsors = [] }) => {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2  text-white border-none" />
-        <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2  text-white border-none" />
+        <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2 text-white border-none" />
+        <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2 text-white border-none" />
       </Carousel>
     </div>
   );
@@ -139,4 +163,3 @@ const SponsorCarousel: React.FC<SponsorCarouselProps> = ({ sponsors = [] }) => {
 };
 
 export default SponsorCarousel;
-

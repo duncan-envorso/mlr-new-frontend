@@ -10,20 +10,20 @@ export const mockHeroData: HeroData = {
     {
       name: 'RootSports',
       hierarchy: 1,
-      logoUrl: '/images/sponsors/Root-Sports.png',
-      sponsorUrl: 'https://www.rootsports.com',
+      logoUrl: '/images/sponsors/Fox13.png',
+      sponsorUrl: 'https://www.fox13seattle.com/',
     },
     {
-      name: 'BillyBaroos',
+      name: 'Filson',
       hierarchy: 2,
-      logoUrl: '/images/sponsors/BillBaroos.png',
-      sponsorUrl: 'https://www.billybaroos.com',
+      logoUrl: '/images/sponsors/Filson.png',
+      sponsorUrl: 'https://www.filson.com/ ',
     },
     {
-      name: 'FoxSeattle',
+      name: 'WAFD Bank',
       hierarchy: 3,
       logoUrl: '/images/sponsors/WaFd.png',
-      sponsorUrl: 'https://www.foxseattle.com',
+      sponsorUrl: 'https://www.wafdbank.com/',
     },
   ],
 };

@@ -37,7 +37,6 @@ export async function fetchTeamData(): Promise<TeamData> {
    
 
     const data: TeamData = await response.json();
-    console.log("TeamData",data)
     
     // Optional: Log the fetched data (remove in production)
 
@@ -292,4 +291,28 @@ export async function clearUserPreferences() {
   const cookieStore = await cookies();
   cookieStore.delete('userPreferences');
   
+}
+
+export async function getHeroData(){
+  const teamId = process.env.NEXT_PUBLIC_TEAM_ID;
+
+  try {
+    const response = await fetch(
+      `https://api.seawolves.envorso.com/v1/panel/config/034db172-942f-48b8-bc91-a0b3eb3a025f`,
+      {
+        headers: {
+          'accept': 'application/json',
+        },
+      }
+    );
+
+  
+
+    const data = await response.json();
+    console.log("data",data)  
+    return data;
+  } catch (error) {
+    console.error('Error fetching hero data:', error);
+    return null;
+  }
 }

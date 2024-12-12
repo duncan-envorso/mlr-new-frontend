@@ -81,7 +81,7 @@ export type MatchesData = {
 
 export type Match = {
   venue: string;
-  start_time: string; // Date as string in ISO format
+  start_time: string; 
   round: number;
   name: string;
   match_id: string;
@@ -93,7 +93,6 @@ export type Match = {
 };
 
 
-// You might want to add this type for the team configuration
 export interface TeamConfig {
   name: string;
   socialMedia: {

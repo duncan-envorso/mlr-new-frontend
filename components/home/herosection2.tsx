@@ -2,90 +2,151 @@
 
 import { Button } from '@/components/ui/button'
 import { currentTeamConfig } from '@/config/teamConfig'
-import { HeroData } from '@/lib/types'
-import { mockHeroData } from '@/mockdata'
+import { toast } from '@/hooks/use-toast'
+import { HeroData, Sponsor } from '@/lib/types'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { ChevronDown, Pencil, Ticket } from 'lucide-react'
+import { ChevronDown, Pencil, ShoppingBag, Ticket } from 'lucide-react'
+import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { HeroEditor } from './admin/HeroEditor'
-import AppStoreButtons from './appStoreButtons'
 import SponsorCarousel from './SponsorsCarousel'
 
-interface APIResponse {
-    configurations: Array<{
-        key: string
-        value: HeroData
-    }>
+interface Configuration {
+    key: string;
+    value: HeroData;
 }
 
+
+
 export default function HeroSectionTwo() {
-    const [heroData, setHeroData] = useState<HeroData>(mockHeroData)
+    const [heroData, setHeroData] = useState<Configuration[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [isEditing, setIsEditing] = useState(false)
     const sectionRef = useRef(null)
+    const { data: session } = useSession()
+    const [isUserSignedIn] = useState(false)
 
-    // Mock authentication - simulating a signed-in user
-    const [isUserSignedIn, setIsUserSignedIn] = useState(false)
+    // Fetch data from the API
+    useEffect(() => {
+        const fetchHeroData = async () => {
+            try {
+                const response = await fetch(
+                    'https://api.seawolves.envorso.com/v1/panel/config/034db172-942f-48b8-bc91-a0b3eb3a025f',
+                    {
+                        headers: {
+                            'accept': 'application/json',
+                            'Authorization': `Bearer ${session?.user.accessToken}`,
+                        },
+                    }
+                )
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`)
+                }
+                const data = await response.json()
+                setHeroData(data.configurations || [])
+            } catch (error) {
+                console.error('Failed to fetch hero data:', error)
+                toast({
+                    title: "Error",
+                    description: "Failed to load hero data. Please refresh the page.",
+                    variant: "destructive",
+                })
+            } finally {
+                setIsLoading(false)
+            }
+        }
+
+        if (session?.user.accessToken) {
+            fetchHeroData()
+        }
+    }, [session?.user.accessToken])
+
+    // Extract the actual hero data from the configurations array
+    const currentHeroData = heroData.find(config => config.key === 'heroData')?.value || {
+        title: '',
+        subtitle: '',
+        ctaPrimary: '',
+        ctaSecondary: '',
+        homePageVideoUrl: '',
+        sponsors: []
+    }
+
+    const handleSaveHeroData = async (updatedData: HeroData) => {
+        try {
+            // Create the proper payload structure
+            const payload = {
+                key: 'heroData',
+                value: updatedData
+            }
+
+            const response = await fetch(
+                'https://api.seawolves.envorso.com/v1/panel/config?teamId=034db172-942f-48b8-bc91-a0b3eb3a025f',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${session?.user.accessToken}`,
+                    },
+                    body: JSON.stringify(payload)
+                }
+            )
+
+            const responseData = await response.json()
+
+            if (!response.ok) {
+                throw new Error(responseData.error || `HTTP error! status: ${response.status}`)
+            }
+
+            // Update local state with new data
+            setHeroData(prevData => {
+                const newData = [...prevData]
+                const index = newData.findIndex(config => config.key === 'heroData')
+                if (index !== -1) {
+                    newData[index] = { key: 'heroData', value: updatedData }
+                } else {
+                    newData.push({ key: 'heroData', value: updatedData })
+                }
+                return newData
+            })
+
+            toast({
+                title: "Success",
+                description: responseData.message || "Hero section updated successfully",
+            })
+
+            setIsEditing(false)
+        } catch (error) {
+            console.error('Failed to save hero data:', error)
+            toast({
+                title: "Error",
+                description: error instanceof Error ? error.message : "Failed to save changes. Please try again.",
+                variant: "destructive",
+            })
+            throw error
+        }
+    }
+
+    const handleSponsorsUpdate = async (updatedSponsors: Sponsor[]) => {
+        try {
+            const updatedData = {
+                ...currentHeroData,
+                sponsors: updatedSponsors
+            }
+            await handleSaveHeroData(updatedData)
+        } catch (error) {
+            console.error('Failed to update sponsors:', error)
+        }
+    }
 
     const { scrollYProgress } = useScroll({
         target: sectionRef,
         offset: ['start start', 'end start'],
     })
 
-    useEffect(() => {
-        const fetchHeroData = async () => {
-            try {
-                const response = await fetch(
-                    `https://api.seawolves.envorso.com/v1/panel/config/${currentTeamConfig?.teamId}`,
-                    {
-                        headers: {
-                            accept: 'application/json',
-                        },
-                    }
-                )
-
-                if (!response.ok) {
-                    throw new Error('Failed to fetch hero data')
-                }
-
-                const data: APIResponse = await response.json()
-                const heroConfig = data.configurations.find(
-                    (config) => config.key === 'heroData'
-                )
-
-                if (heroConfig) {
-                    setHeroData({
-                        ...heroConfig.value,
-                        sponsors: Array.isArray(heroConfig.value.sponsors)
-                            ? heroConfig.value.sponsors
-                            : mockHeroData.sponsors
-                    })
-                } else {
-                    setHeroData(mockHeroData)
-                }
-            } catch (error) {
-                console.error('Error fetching hero data:', error)
-                setHeroData(mockHeroData)
-            } finally {
-                setIsLoading(false)
-            }
-        }
-
-        fetchHeroData()
-    }, [])
-
-    const handleSaveHeroData = async (updatedData: HeroData) => {
-        try {
-            setHeroData(updatedData)
-            setIsEditing(false)
-        } catch (error) {
-            console.error('Failed to save hero data:', error)
-        }
-    }
-
     const getYouTubeEmbedUrl = () => {
         try {
-            const url = heroData.homePageVideoUrl
+            const url = currentHeroData.homePageVideoUrl
             if (!url) return ''
 
             let videoId = ''
@@ -141,7 +202,7 @@ export default function HeroSectionTwo() {
         return (
             <div className="flex items-center justify-center min-h-screen p-4 bg-black/50">
                 <HeroEditor
-                    initialData={heroData}
+                    initialData={currentHeroData}
                     onSave={handleSaveHeroData}
                     onClose={() => setIsEditing(false)}
                 />
@@ -150,7 +211,7 @@ export default function HeroSectionTwo() {
     }
 
     return (
-        <section ref={sectionRef} className="relative min-h-screen w-full overflow-hidden ">
+        <section ref={sectionRef} className="relative min-h-screen w-full overflow-hidden">
             {!isUserSignedIn && (
                 <Button
                     variant="outline"
@@ -163,7 +224,7 @@ export default function HeroSectionTwo() {
             )}
 
             <div className="sticky h-screen">
-                {heroData.homePageVideoUrl && (
+                {currentHeroData.homePageVideoUrl && (
                     <iframe
                         className="absolute w-[100vw] h-[150vh] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-[177.77vh] min-h-[80vw] -mt-[60px]"
                         src={getYouTubeEmbedUrl()}
@@ -186,59 +247,72 @@ export default function HeroSectionTwo() {
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-transparent" />
 
                 <motion.div
-                className="relative flex h-full items-start lg:items-center justify-center pt-20 lg:pt-0"
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
-                style={{ opacity, scale, y }}
-            >
-                <div className="container mx-auto px-4 mt-40 md:mt-2 lg:mt-2">
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start lg:items-center">
-                        {/* Move the SponsorCarousel above the text content for mobile */}
-                        <div className="lg:hidden w-full mb-8">
-                            <SponsorCarousel sponsors={heroData.sponsors} />
-                        </div>
+                    className="relative flex h-full items-start lg:items-center justify-center pt-20 lg:pt-0"
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                    style={{ opacity, scale, y }}
+                >
+                    <div className="container mx-auto px-4 mt-40 md:mt-2 lg:mt-2">
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start lg:items-center">
+                            <div className="lg:hidden w-full mb-8">
+                                <SponsorCarousel 
+                                    sponsors={currentHeroData.sponsors}
+                                    onSponsorsUpdate={handleSponsorsUpdate}
+                                />
+                            </div>
 
-                        <div className="text-left lg:col-span-2 ml-4 lg:ml-20 mb-8 lg:mb-20">
-                            <motion.h1
-                                className={`font-heading font-black mb-4 text-4xl lg:text-7xl uppercase text-white ${currentTeamConfig?.fonts.h1[0]}`}
-                                variants={itemVariants}
-                            >
-                                {heroData.title}
-                            </motion.h1>
-
-                            <motion.p
-                                className={`font-body mb-8 text-lg font-light text-white sm:text-xl md:text-2xl ${currentTeamConfig?.fonts.body[0]}`}
-                                variants={itemVariants}
-                            >
-                                {heroData.subtitle}
-                            </motion.p>
-
-                            <motion.div
-                                className="flex flex-col sm:flex-row items-start space-y-4 sm:space-y-0 sm:space-x-4"
-                                variants={itemVariants}
-                            >
-                                <Button
-                                    variant="default"
-                                    size="lg"
-                                    className={`font-body w-full sm:w-auto rounded-full px-8 py-6 text-lg font-semibold ${currentTeamConfig?.colors['primary-foreground']}`}
+                            <div className="text-left lg:col-span-2 ml-4 lg:ml-20 mb-8 lg:mb-20">
+                                <motion.h1
+                                    className={`font-heading font-black mb-4 text-4xl lg:text-7xl uppercase text-white ${currentTeamConfig?.fonts.h1[0]}`}
+                                    variants={itemVariants}
                                 >
-                                    <Ticket className="mr-2 h-5 w-5" />
-                                    {heroData.ctaPrimary}
-                                </Button>
-                                {currentTeamConfig && (
-                                    <AppStoreButtons currentTeamConfig={currentTeamConfig} heroData={heroData} />
-                                )}
-                            </motion.div>
-                        </div>
+                                    {currentHeroData.title}
+                                </motion.h1>
 
-                        {/* Keep the SponsorCarousel in its original position for larger screens */}
-                        <div className="hidden lg:block">
-                            <SponsorCarousel sponsors={heroData.sponsors} />
+                                <motion.p
+                                    className={`font-body mb-8 text-lg font-light text-white sm:text-xl md:text-2xl ${currentTeamConfig?.fonts.body[0]}`}
+                                    variants={itemVariants}
+                                >
+                                    {currentHeroData.subtitle}
+                                </motion.p>
+
+                                <motion.div
+                                    className="flex flex-col sm:flex-row items-start space-y-4 sm:space-y-0 sm:space-x-4"
+                                    variants={itemVariants}
+                                >
+                                    <Button
+                                        variant="default"
+                                        size="lg"
+                                        className={`font-body w-full sm:w-auto rounded-full px-8 py-6 text-lg font-semibold ${currentTeamConfig?.colors['primary-foreground']}`}
+                                    >
+                                        <Ticket className="mr-2 h-5 w-5" />
+                                        {currentHeroData.ctaPrimary}
+                                    </Button>
+                                    <Link href={'/shop'}>
+                                        <Button
+                                            variant="outline"
+                                            size="lg"
+                                            className={`font-body w-full rounded-full border-2 border-white bg-transparent px-8 py-6 text-lg font-semibold text-white sm:w-auto`}
+                                        >
+                                            <ShoppingBag className="mr-2 h-5 w-5" />
+                                            Visit Shop
+                                        </Button>
+                                    </Link>
+                                </motion.div>
+                            </div>
+
+                            <div className="hidden lg:block">
+                                <div className="flex flex-col items-center">
+                                    <SponsorCarousel 
+                                        sponsors={currentHeroData.sponsors}
+                                        onSponsorsUpdate={handleSponsorsUpdate}
+                                    />
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </motion.div>
+                </motion.div>
             </div>
 
             <motion.div

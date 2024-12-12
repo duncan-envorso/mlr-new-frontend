@@ -9,10 +9,12 @@ import { toast } from '@/hooks/use-toast';
 import { HeroData, Sponsor } from '@/lib/types';
 import { AnimatePresence, motion } from 'framer-motion';
 import { AlignLeft, Loader2, Pencil, Save, Type, Video, X } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { SponsorList } from './SponsorList';
+
 
 interface HeroEditorProps {
   initialData: HeroData;
@@ -23,6 +25,10 @@ interface HeroEditorProps {
 export function HeroEditor({ initialData, onSave, onClose }: HeroEditorProps) {
   const [data, setData] = useState<HeroData>(initialData);
   const [isLoading, setIsLoading] = useState(false);
+  const { data: session } = useSession();
+
+
+
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -30,29 +36,26 @@ export function HeroEditor({ initialData, onSave, onClose }: HeroEditorProps) {
     const { name, value } = e.target;
     setData((prev) => ({ ...prev, [name]: value }));
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await onSave(data);
-      toast({
-        title: "Changes saved",
-        description: "Your hero section has been updated successfully.",
-      });
+        // Just pass the data to the parent component
+        await onSave(data);
+        
+        setIsLoading(false);
+        onClose();
     } catch (error) {
-      console.error('Failed to save changes:', error);
-      toast({
-        title: "Error",
-        description: "Failed to save changes. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
+        console.error('Failed to save changes:', error);
+        toast({
+            title: "Error",
+            description: "Failed to save changes. Please try again.",
+            variant: "destructive",
+        });
+        setIsLoading(false);
     }
-  };
-
-  const updateSponsors = (newSponsors: Sponsor[]) => {
+};
+  const updateSponsors = async (newSponsors: Sponsor[]) => {
     setData((prev) => ({ ...prev, sponsors: newSponsors }));
   };
 
@@ -101,7 +104,7 @@ export function HeroEditor({ initialData, onSave, onClose }: HeroEditorProps) {
               className="py-3 rounded-md text-primary-foreground data-[state=active]:bg-accent data-[state=active]:text-accent-foreground transition-all"
             >
               <AlignLeft className="mr-2 h-4 w-4" />
-              Sponsors
+              Home Carousel
             </TabsTrigger>
           </TabsList>
           

@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Ban, Bus, Car, Coffee, Info, Key, MapPin } from 'lucide-react'
-import StadiumView from './stadium-view'
+import Image from 'next/image'
 
 export default function Component() {
   const tabTriggerStyles = "flex items-center justify-center p-3 w-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
@@ -23,7 +23,7 @@ export default function Component() {
           <p className="text-lg text-muted-foreground">Home of Seattle Seawolves Rugby</p>
         </div>
 
-        {/* Seat Map Section */}
+        {/* Stadium Map Section */}
         <Card className="mb-8">
           <CardHeader>
             <h2 className="text-2xl font-bold flex items-center gap-2">
@@ -32,8 +32,14 @@ export default function Component() {
             </h2>
           </CardHeader>
           <CardContent>
-            <div className="p-4 rounded-lg text-center">
-              <StadiumView />
+            <div className="relative w-full aspect-[16/9] rounded-lg overflow-hidden">
+              <Image 
+                src="/images/stadiumLayout.png"
+                alt="Starfire Stadium Seating Layout"
+                fill
+                className="object-contain"
+                priority
+              />
             </div>
           </CardContent>
         </Card>

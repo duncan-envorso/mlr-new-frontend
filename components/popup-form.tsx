@@ -27,17 +27,70 @@ const PopupForm = ({ onClose }: { onClose: () => void }) => {
         </div>
         <form className="p-6 space-y-4">
           <div className="space-y-4">
-            <input name="firstName" type="text" placeholder="John" className="w-full p-2 border border-gray-300 rounded" />
-            <input name="lastName" type="text" placeholder="Doe" className="w-full p-2 border border-gray-300 rounded" />
-            <input name="email" type="email" placeholder="johnsmith@example.com" className="w-full p-2 border border-gray-300 rounded" />
-            
+            <div>
+              <input 
+                name="firstName" 
+                type="text" 
+                required
+                placeholder="First Name" 
+                className="w-full p-2 border border-gray-300 rounded" 
+              />
+            </div>
+            <div>
+              <input 
+                name="lastName" 
+                type="text" 
+                required
+                placeholder="Last Name" 
+                className="w-full p-2 border border-gray-300 rounded" 
+              />
+            </div>
+            <div>
+              <input 
+                name="email" 
+                type="email" 
+                required
+                placeholder="johnsmith@example.com" 
+                className="w-full p-2 border border-gray-300 rounded" 
+              />
+            </div>
+            <div>
+              <input 
+                name="phone" 
+                type="tel" 
+                placeholder="Phone (Optional)" 
+                className="w-full p-2 border border-gray-300 rounded" 
+              />
+            </div>
+            <div>
+              <input 
+                name="zipCode" 
+                type="text" 
+                placeholder="Zip Code (Optional)" 
+                className="w-full p-2 border border-gray-300 rounded" 
+              />
+            </div>
           </div>
           
           <div className="flex flex-col gap-3">
-            <button type="button" onClick={onClose} className="w-full bg-black text-white p-3 rounded font-semibold hover:bg-gray-800">
+            <button 
+              type="submit" 
+              className="w-full bg-primary text-white p-3 rounded font-semibold hover:bg-primary/90"
+            >
+              Submit
+            </button>
+            <button 
+              type="button" 
+              onClick={onClose} 
+              className="w-full bg-black text-white p-3 rounded font-semibold hover:bg-gray-800"
+            >
               Maybe Later
             </button>
-            <button type="button" onClick={handleNeverShow} className="w-full text-gray-600 hover:text-gray-800">
+            <button 
+              type="button" 
+              onClick={handleNeverShow} 
+              className="w-full text-gray-600 hover:text-gray-800"
+            >
               Never show this again
             </button>
           </div>
