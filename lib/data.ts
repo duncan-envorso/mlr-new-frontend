@@ -64,7 +64,7 @@ export const fanCentralMenu = [
   {
     name: "MATCHDAY",
     url: "/fan-central/matchday",
-    description: "Everything you need to know about gameday",
+    description: "Everything you need to know about matchday",
     image: currentTeamConfig?.fanCentral.mainResources[0]?.bgImage,
     icon: Calendar
 
@@ -97,6 +97,13 @@ export const fanCentralMenu = [
     description: "Download official team wallpapers",
     image: currentTeamConfig?.fanCentral.mainResources[4]?.bgImage,
     icon: Wallpaper
+  },
+  {
+    name: "PATHWAY",
+    url: "/fan-central/pathway",
+    description: "Learn about our development pathway",
+    image: "/images/pathway/PathWayMain.jpeg",
+    icon: Users
   }
 ];
 
@@ -109,19 +116,19 @@ export const teamMenu = [
   },
   {
     name: "COACHING STAFF",
-    url: "/roster",
+    url: "/coaches",
     description: "Learn about our coaching team",
     icon: Trophy
   },
   {
     name: "RUGBY OPERATIONS",
-    url: "/roster",
+    url: "/operations",
     description: "Behind the scenes of rugby operations",
     icon: Briefcase
   },
   {
     name: "FRONT OFFICE",
-    url: "/roster",
+    url: "/front-office",
     description: "Meet our administrative team",
     icon: Building2
   },
@@ -169,10 +176,9 @@ export const menuItems = [
     hasDropdown: true,
     dropdownItems: ticketsMenu
   },
-  { name: "TEAM SHOP", url: "/shop" },
+  { name: "SHOP", url: "https://shop.seawolves.rugby" },
   { name: "SCHEDULE", url: "/schedule" },
   { name: "FAN CENTRAL", url: "/fan-central", hasDropdown: true },
-  { name: "PATHWAY", url: "/pathway" },
   { name: "NEWS", url: "/news" },
   { name: "TEAM", url: "/roster", hasDropdown: true },
 ];

@@ -5,7 +5,6 @@ import Image from "next/image";
 import { Suspense, useState } from "react";
 import ProductCollectionsCarousel from "./CollectionsCarousel";
 import NavigationMenuDemo from "./DropMenu";
-import { SearchBar } from "./SearchBar";
 
 interface CollectionWithProducts {
   handle: string;
@@ -19,7 +18,7 @@ interface ShopContentProps {
 
 export default function ShopContent({ collections = [], menus = [] }: ShopContentProps) {
   const [searchTerm, setSearchTerm] = useState('');
-  
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
@@ -27,7 +26,7 @@ export default function ShopContent({ collections = [], menus = [] }: ShopConten
       </div>
 
       {currentTeamConfig?.shopBanner && (
-        <div className="relative w-full aspect-[16/9] md:h-64 mb-8 rounded-lg overflow-hidden">
+        <div className="relative w-full aspect-[16/9] md:h-[400px] mb-8 rounded-lg overflow-hidden">
           <Image
             src={currentTeamConfig.shopBanner}
             alt={`${currentTeamConfig.name} Shop Banner`}
@@ -35,13 +34,16 @@ export default function ShopContent({ collections = [], menus = [] }: ShopConten
             className="object-cover"
             priority
           />
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-start pl-20 text-white"> {/* Added overlay */}
+            <h2 className="text-3xl font-bold">Welcome to the Seawolves Shop!</h2> {/* Welcome message */}
+          </div>
         </div>
       )}
 
-      <div className="flex flex-col md:flex-row gap-4 mb-8">
+      {/* <div className="flex flex-col md:flex-row gap-4 mb-8">
         <SearchBar value={searchTerm} onChange={setSearchTerm} />
-      </div>
-      
+      </div> */}
+
       <Suspense fallback={<p>Loading shop content...</p>}>
         <ProductCollectionsCarousel collections={collections} />
       </Suspense>

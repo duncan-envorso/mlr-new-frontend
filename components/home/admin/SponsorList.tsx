@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -6,7 +8,7 @@ import { toast } from '@/hooks/use-toast';
 import { Sponsor } from '@/lib/types';
 import { AnimatePresence, motion } from 'framer-motion';
 import { GripVertical, Plus, Trash2 } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 
 interface SponsorListProps {
@@ -77,7 +79,7 @@ export function SponsorList({ sponsors, onUpdate }: SponsorListProps) {
         type="button"
         onClick={addSponsor}
         disabled={isUpdating}
-        className="w-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors duration-200"
+        className="w-full bg-black text-white hover:bg-primary/90 transition-colors duration-200"
       >
         <Plus className="mr-2 h-4 w-4" />
         Add Sponsor
@@ -92,6 +94,7 @@ export function SponsorList({ sponsors, onUpdate }: SponsorListProps) {
             transition={{ duration: 0.2 }}
           >
             <SponsorRow
+              key={`${index}-${sponsor.name}`}
               index={index}
               sponsor={sponsor}
               onMove={moveSponsor}
@@ -130,6 +133,10 @@ function SponsorRow({
   isUpdating 
 }: SponsorRowProps) {
   const dragHandleRef = useRef<HTMLDivElement>(null);
+  // Add local state for input values
+  const [localName, setLocalName] = useState(sponsor.name);
+  const [localLogoUrl, setLocalLogoUrl] = useState(sponsor.logoUrl);
+  const [localSponsorUrl, setLocalSponsorUrl] = useState(sponsor.sponsorUrl);
 
   const [{ isDragging }, dragRef, previewRef] = useDrag({
     type: 'SPONSOR',
@@ -151,6 +158,13 @@ function SponsorRow({
       isOver: monitor.isOver(),
     }),
   });
+
+  // Update local state when sponsor prop changes
+  useEffect(() => {
+    setLocalName(sponsor.name);
+    setLocalLogoUrl(sponsor.logoUrl);
+    setLocalSponsorUrl(sponsor.sponsorUrl);
+  }, [sponsor]);
 
   return (
     <Card
@@ -176,18 +190,23 @@ function SponsorRow({
           </div>
 
           <div className="flex-1">
-            <Button
-              variant="ghost"
-              className="w-full justify-start p-0 h-auto font-normal hover:bg-transparent text-primary-foreground"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onToggleExpand();
-              }}
-              disabled={isUpdating}
-            >
-              {sponsor.name || 'Unnamed Sponsor'}
-            </Button>
+            {isExpanded ? (
+              <Input
+                value={localName}
+                onChange={(e) => setLocalName(e.target.value)}
+                onBlur={() => onUpdate(index, { name: localName })}
+                placeholder="Sponsor Name"
+                className="bg-secondary-foreground text-secondary"
+                disabled={isUpdating}
+              />
+            ) : (
+              <div
+                className="w-full text-left p-2 font-normal text-primary-foreground cursor-pointer hover:bg-primary/10 rounded"
+                onClick={onToggleExpand}
+              >
+                {localName || 'Unnamed Sponsor'}
+              </div>
+            )}
           </div>
           <Button
             type="button"
@@ -210,24 +229,12 @@ function SponsorRow({
               className="mt-4 space-y-4"
             >
               <div className="space-y-2">
-                <Label htmlFor={`sponsor-name-${index}`} className="text-primary-foreground">Name</Label>
-                <Input
-                  id={`sponsor-name-${index}`}
-                  value={sponsor.name}
-                  onChange={(e) => onUpdate(index, { name: e.target.value })}
-                  onClick={(e) => e.stopPropagation()}
-                  placeholder="Sponsor Name"
-                  className="bg-secondary-foreground text-secondary"
-                  disabled={isUpdating}
-                />
-              </div>
-              <div className="space-y-2">
                 <Label htmlFor={`sponsor-logo-${index}`} className="text-primary-foreground">Logo URL</Label>
                 <Input
                   id={`sponsor-logo-${index}`}
-                  value={sponsor.logoUrl}
-                  onChange={(e) => onUpdate(index, { logoUrl: e.target.value })}
-                  onClick={(e) => e.stopPropagation()}
+                  value={localLogoUrl}
+                  onChange={(e) => setLocalLogoUrl(e.target.value)}
+                  onBlur={() => onUpdate(index, { logoUrl: localLogoUrl })}
                   placeholder="Logo URL"
                   className="bg-secondary-foreground text-secondary"
                   disabled={isUpdating}
@@ -237,9 +244,9 @@ function SponsorRow({
                 <Label htmlFor={`sponsor-url-${index}`} className="text-primary-foreground">Sponsor URL</Label>
                 <Input
                   id={`sponsor-url-${index}`}
-                  value={sponsor.sponsorUrl}
-                  onChange={(e) => onUpdate(index, { sponsorUrl: e.target.value })}
-                  onClick={(e) => e.stopPropagation()}
+                  value={localSponsorUrl}
+                  onChange={(e) => setLocalSponsorUrl(e.target.value)}
+                  onBlur={() => onUpdate(index, { sponsorUrl: localSponsorUrl })}
                   placeholder="Sponsor URL"
                   className="bg-secondary-foreground text-secondary"
                   disabled={isUpdating}

@@ -79,19 +79,13 @@ const PopupForm = ({ onClose }: { onClose: () => void }) => {
             >
               Submit
             </button>
-            <button 
-              type="button" 
-              onClick={onClose} 
-              className="w-full bg-black text-white p-3 rounded font-semibold hover:bg-gray-800"
-            >
-              Maybe Later
-            </button>
+            
             <button 
               type="button" 
               onClick={handleNeverShow} 
               className="w-full text-gray-600 hover:text-gray-800"
             >
-              Never show this again
+              Maybe Later
             </button>
           </div>
         </form>

@@ -10,13 +10,9 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { PlayerCard } from './player-card';
 
-
-
-
-
 export type MatchDetail = {
-    homeTeam: Team & { lineUp: Player[] }; // Added lineUp to Team
-    awayTeam: Team & { lineUp: Player[] }; // Added lineUp to Team
+    homeTeam: Team & { lineUp: Player[] };
+    awayTeam: Team & { lineUp: Player[] };
     referees: { name: string; type: string; }[];
     venue: string;
     start_time: string;
@@ -47,14 +43,14 @@ const StatComparison = ({
 
     return (
         <div className="space-y-1">
-            <div className="flex justify-between text-xs text-primary">
+            <div className="flex justify-between text-xs font-industry-demi text-navy">
                 <span>{homeStat}</span>
-                <span>{label}</span>
+                <span className="font-industry-ultra uppercase">{label}</span>
                 <span>{awayStat}</span>
             </div>
-            <div className="h-2 rounded-full bg-primary overflow-hidden">
+            <div className="h-2 rounded-full bg-navy/10 overflow-hidden">
                 <div
-                    className="h-full bg-primary-foreground transition-all"
+                    className="h-full bg-green transition-all"
                     style={{ width: `${homePercent}%` }}
                 />
             </div>
@@ -76,22 +72,22 @@ export default function MatchDetail({ matchData }: { matchData: MatchDetail }) {
                 <Link href="/schedule">
                     <Button 
                         variant="ghost" 
-                        className="group hover:bg-primary/20 text-primary"
+                        className="group hover:bg-navy/10 text-navy font-industry-demi"
                     >
                         <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" />
                         Back to Schedule
                     </Button>
                 </Link>
             </div>
-            <div className="rounded-xl bg-primary/90 backdrop-blur-sm p-6 border border-primary/10">
+            <div className="rounded-xl bg-navy/90 backdrop-blur-sm p-6 border border-navy/10">
                 <div className="mb-4 flex items-center justify-between">
                     <Badge
                         variant="outline"
-                        className="bg-accent text-primary-foreground border-primary/20"
+                        className="bg-green text-navy border-navy/20 font-industry-demi uppercase"
                     >
                         Round {matchData.round}
                     </Badge>
-                    <div className="flex items-center space-x-4 text-sm text-secondary-foreground">
+                    <div className="flex items-center space-x-4 text-sm text-white font-industry-book">
                         <div className="flex items-center">
                             <Calendar className="mr-2 h-4 w-4" />
                             <span>
@@ -112,7 +108,7 @@ export default function MatchDetail({ matchData }: { matchData: MatchDetail }) {
                 {/* Teams Score */}
                 <div className="flex items-center justify-between">
                     <div className="flex flex-col items-center space-y-3">
-                        <div className="relative p-4 rounded-full bg-primary/90">
+                        <div className="relative p-4 rounded-full bg-white/10">
                             <Image
                                 src={matchData.homeTeam.image_path}
                                 width={80}
@@ -121,21 +117,21 @@ export default function MatchDetail({ matchData }: { matchData: MatchDetail }) {
                                 className="h-20 w-20 object-contain"
                             />
                         </div>
-                        <h2 className="text-xl font-bold text-primary-foreground">
+                        <h2 className="text-xl font-industry-ultra uppercase text-white">
                             {matchData.homeTeam.name}
                         </h2>
-                        <span className="text-4xl font-bold text-white/90">
+                        <span className="text-4xl font-industry-ultra text-white">
                             {matchData.lastMatchData.home_score}
                         </span>
                     </div>
                     <div className="flex flex-col items-center">
-                        <span className="text-2xl font-bold text-secondary-foreground/50">VS</span>
-                        <Badge className="mt-2 bg-accent/80 text-accent-foreground">
+                        <span className="text-2xl font-industry-ultra text-white/50">VS</span>
+                        <Badge className="mt-2 bg-green/80 text-navy font-industry-demi uppercase">
                             {matchData.matchType}
                         </Badge>
                     </div>
                     <div className="flex flex-col items-center space-y-3">
-                        <div className="relative p-4 rounded-full bg-secondary/10">
+                        <div className="relative p-4 rounded-full bg-white/10">
                             <Image
                                 src={matchData.awayTeam.image_path}
                                 width={80}
@@ -144,10 +140,10 @@ export default function MatchDetail({ matchData }: { matchData: MatchDetail }) {
                                 className="h-20 w-20 object-contain"
                             />
                         </div>
-                        <h2 className="text-xl font-bold text-primary-foreground">
+                        <h2 className="text-xl font-industry-ultra uppercase text-white">
                             {matchData.awayTeam.name}
                         </h2>
-                        <span className="text-4xl font-bold text-white/90">
+                        <span className="text-4xl font-industry-ultra text-white">
                             {matchData.lastMatchData.away_score}
                         </span>
                     </div>
@@ -156,17 +152,17 @@ export default function MatchDetail({ matchData }: { matchData: MatchDetail }) {
 
             {/* Match Details Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-                <TabsList className="grid w-full bg-primary/40 grid-cols-2 gap-2 text-lg">
+                <TabsList className="grid w-full bg-navy/10 grid-cols-2 gap-2 text-lg p-1">
                     <TabsTrigger
                         value="lineups"
-                        className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-primary/50 data-[state=inactive]:text-secondary-foreground"
+                        className="font-industry-ultra uppercase data-[state=active]:bg-green data-[state=active]:text-navy data-[state=inactive]:text-navy/60"
                     >
                         <Users className="mr-2 h-4 w-4" />
                         Lineups
                     </TabsTrigger>
                     <TabsTrigger
                         value="stats"
-                        className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=inactive]:bg-primary/0 data-[state=inactive]:text-secondary-foreground"
+                        className="font-industry-ultra uppercase data-[state=active]:bg-green data-[state=active]:text-navy data-[state=inactive]:text-navy/60"
                     >
                         <Trophy className="mr-2 h-4 w-4" />
                         Match Stats
@@ -177,7 +173,7 @@ export default function MatchDetail({ matchData }: { matchData: MatchDetail }) {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {/* Home Team */}
                         <div className="space-y-4">
-                            <h3 className="text-lg font-bold text-primary">
+                            <h3 className="text-lg font-industry-ultra uppercase text-navy">
                                 {matchData.homeTeam.name}
                             </h3>
                             <div className="space-y-2">
@@ -189,7 +185,7 @@ export default function MatchDetail({ matchData }: { matchData: MatchDetail }) {
 
                         {/* Away Team */}
                         <div className="space-y-4">
-                            <h3 className="text-lg font-bold text-primary">
+                            <h3 className="text-lg font-industry-ultra uppercase text-navy">
                                 {matchData.awayTeam.name}
                             </h3>
                             <div className="space-y-2">
@@ -202,7 +198,7 @@ export default function MatchDetail({ matchData }: { matchData: MatchDetail }) {
                 </TabsContent>
 
                 <TabsContent value="stats" className="space-y-6">
-                    <div className="rounded-xl bg-primary/30 backdrop-blur-sm p-6 space-y-4 border border-primary/10">
+                    <div className="rounded-xl bg-navy/5 backdrop-blur-sm p-6 space-y-4 border border-navy/10">
                         <StatComparison
                             label="Tries"
                             homeStat={homeStats?.tries}
@@ -236,16 +232,18 @@ export default function MatchDetail({ matchData }: { matchData: MatchDetail }) {
                     </div>
 
                     {/* Officials */}
-                    <div className="rounded-xl bg-primary/30 backdrop-blur-sm p-6 border border-primary/10">
-                        <h3 className="mb-4 text-lg font-bold text-primary/80">Match Officials</h3>
+                    <div className="rounded-xl bg-navy/5 backdrop-blur-sm p-6 border border-navy/10">
+                        <h3 className="mb-4 text-lg font-industry-ultra uppercase text-navy">
+                            Match Officials
+                        </h3>
                         <div className="space-y-2">
                             {matchData.referees.map((ref) => (
                                 <div
                                     key={ref.name}
                                     className="flex justify-between text-sm"
                                 >
-                                    <span className="text-primary">{ref.name}</span>
-                                    <span className="text-secondary">{ref.type}</span>
+                                    <span className="font-industry-demi text-navy">{ref.name}</span>
+                                    <span className="font-industry-book text-navy/60">{ref.type}</span>
                                 </div>
                             ))}
                         </div>

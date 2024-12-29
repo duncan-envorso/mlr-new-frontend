@@ -30,13 +30,18 @@ const Price: React.FC<PriceProps> = ({
   }, [amount, currencyCode, locale]);
 
   return (
-    <Component className={cn("inline-flex items-center", className)}>
-      <span aria-label={`Price: ${formattedAmount}`}>
+    <Component className={cn("inline-flex items-center font-industry-ultra", className)}>
+      <span 
+        aria-label={`Price: ${formattedAmount}`}
+        className="text-navy"
+      >
         {formattedAmount}
       </span>
-      {/* <span className={cn("ml-1 text-sm", currencyCodeClassName)}>
+      {/* Optional currency code display
+      <span className={cn("ml-1 text-sm font-industry-book text-navy/60", currencyCodeClassName)}>
         {currencyCode}
-      </span> */}
+      </span> 
+      */}
     </Component>
   );
 };

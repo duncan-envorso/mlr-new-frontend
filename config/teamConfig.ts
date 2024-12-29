@@ -117,7 +117,7 @@ export const teamConfigs: Record<string, TeamConfig> = {
   // Add more team configurations here
 };
 
-export const currentTeam = process.env.NEXT_PUBLIC_TEAM_ID || 'seattle-seawolves';
+export const currentTeam = process.env.NEXT_PUBLIC_TEAM || 'seattle-seawolves';
 export const currentTeamConfig = teamConfigs[currentTeam as keyof typeof teamConfigs];
 export const allTeams = Object.keys(teamConfigs);
 export const getSponsorSize = (priority: number) => {

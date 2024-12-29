@@ -18,7 +18,7 @@ export default function PopularItems({ collectionHandle, collectionTitle, produc
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8">
           <div className="grid gap-1">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">{collectionTitle}</h2>
-            <p className="text-gray-500 dark:text-gray-400">Check out our most sought-after items</p>
+            <p className="text-gray-500 ">Check out our most sought-after items</p>
           </div>
           <Link
             className="inline-flex items-center rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-gray-50 hover:bg-gray-900/90 mt-4 md:mt-0"

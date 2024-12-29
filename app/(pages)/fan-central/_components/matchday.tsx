@@ -5,8 +5,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Ban, Bus, Car, Coffee, Info, Key, MapPin } from 'lucide-react'
 import Image from 'next/image'
 
-export default function Component() {
-  const tabTriggerStyles = "flex items-center justify-center p-3 w-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+export default function MatchDayComponent() {
+  const tabTriggerStyles = "flex items-center justify-center p-3 w-full data-[state=active]:bg-secondary data-[state=active]:text-primary-foreground"
 
   const IconWrapper = ({ children }: { children: React.ReactNode }) => (
     <div className="rounded-full bg-muted p-2 mb-3">
@@ -15,8 +15,8 @@ export default function Component() {
   )
 
   return (
-    <div className="min-h-screen py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen ">
+      <div className="">
         {/* Hero Section */}
         <div className="mb-8 text-center">
           <h1 className="text-4xl font-bold mb-4">Starfire Sports Stadium</h1>

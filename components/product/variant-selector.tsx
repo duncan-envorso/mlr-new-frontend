@@ -38,7 +38,9 @@ export function VariantSelector({
     <div className="space-y-4">
       {options.map((option) => (
         <div key={option.id} className="mb-4">
-          <h3 className="text-sm font-medium text-gray-900 mb-2">{option.name}</h3>
+          <h3 className="text-sm font-industry-demi text-navy mb-2">
+            {option.name}
+          </h3>
           <div className="flex flex-wrap gap-2">
             {option.values.map((value) => {
               const optionNameLowerCase = option.name.toLowerCase();
@@ -67,11 +69,11 @@ export function VariantSelector({
                   disabled={!isAvailableForSale}
                   title={`${option.name} ${value}${!isAvailableForSale ? ' (Out of Stock)' : ''}`}
                   className={clsx(
-                    'px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200',
+                    'px-3 py-2 text-sm font-industry-book rounded-lg transition-all duration-200',
                     {
-                      'bg-primary text-primary-foreground': isActive,
-                      'bg-gray-200 text-gray-900 hover:bg-gray-300': !isActive && isAvailableForSale,
-                      'bg-gray-100 text-gray-400 cursor-not-allowed': !isAvailableForSale
+                      'bg-green text-navy font-industry-demi': isActive,
+                      'bg-navy/10 text-navy hover:bg-navy/20': !isActive && isAvailableForSale,
+                      'bg-navy/5 text-navy/40 cursor-not-allowed': !isAvailableForSale
                     }
                   )}
                 >

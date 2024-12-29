@@ -17,8 +17,8 @@ function SubmitButton({
   selectedVariantId: string | undefined;
 }) {
   const buttonClasses =
-    'relative flex w-full items-center justify-center rounded-full bg-primary p-4 tracking-wide text-white font-medium text-sm';
-  const disabledClasses = 'bg-gray-300 text-gray-500';
+    'relative flex w-full items-center justify-center rounded-lg bg-green p-6 text-navy font-industry-ultra uppercase tracking-wide text-sm';
+  const disabledClasses = 'bg-navy/10 text-navy/40';
 
   if (!availableForSale) {
     return (
@@ -45,9 +45,9 @@ function SubmitButton({
       whileHover={{ scale: 1.01 }}
       whileTap={{ scale: 0.95 }}
       aria-label="Add to cart"
-      className={buttonClasses}
+      className={clsx(buttonClasses, 'hover:bg-green/90 transition-colors duration-200')}
     >
-      <ShoppingBag className="h-5 w-5 mr-2 text-accent" />
+      <ShoppingBag className="h-5 w-5 mr-2 text-navy" />
       Add To Cart
     </motion.button>
   );
@@ -62,6 +62,7 @@ export function AddToCart({ product }: { product: Product }) {
   const variant = variants.find((variant: ProductVariant) =>
     variant.selectedOptions.every((option) => option.value === state[option.name.toLowerCase()])
   );
+
   const defaultVariantId = variants.length === 1 ? variants[0]?.id : undefined;
   const selectedVariantId = variant?.id || defaultVariantId;
   const actionWithVariant = formAction.bind(null, selectedVariantId);

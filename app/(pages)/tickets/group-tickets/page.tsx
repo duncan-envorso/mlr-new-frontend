@@ -14,18 +14,26 @@ const ExperienceCard = ({ title, description, image }: {
   description: string
   image: string
 }) => (
-  <Card className="overflow-hidden">
-    <div className="relative h-48">
+<Card className="group relative overflow-hidden border-none shadow-lg">
+    <div className="relative aspect-[4/3]">
       <Image 
         src={image} 
         alt={title} 
         fill
-        className="object-cover"
+        className="object-cover transition-transform duration-300 group-hover:scale-105"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/50 to-navy/20" />
+      <Image
+        src="/images/seawolves-logo.png"
+        alt="Seawolves Rugby"
+        width={60}
+        height={60}
+        className="absolute right-4 top-4 z-10"
       />
     </div>
-    <div className="p-6 space-y-2">
-      <h3 className="text-xl font-bold text-primary">{title}</h3>
-      <p className="text-muted-foreground">{description}</p>
+    <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+      <h3 className="mb-2 text-xl font-industry-ultra uppercase">{title}</h3>
+      <p className="font-industry-book text-sm">{description}</p>
     </div>
   </Card>
 )
@@ -48,29 +56,35 @@ const GroupTicketForm = () => {
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <Label htmlFor="firstName">First Name<span className="text-destructive">*</span></Label>
+          <Label htmlFor="firstName" className="font-industry-demi text-navy">
+            First Name<span className="text-red-500">*</span>
+          </Label>
           <Input
             id="firstName"
             name="firstName"
             value={formData.firstName}
             onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
             required
+            className="border-navy/20 focus:border-green"
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="lastName">Last Name</Label>
+          <Label htmlFor="lastName" className="font-industry-demi text-navy">Last Name</Label>
           <Input
             id="lastName"
             name="lastName"
             value={formData.lastName}
             onChange={(e) => setFormData(prev => ({ ...prev, lastName: e.target.value }))}
+            className="border-navy/20 focus:border-green"
           />
         </div>
       </div>
 
       <div className="grid md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <Label htmlFor="email">Email<span className="text-destructive">*</span></Label>
+          <Label htmlFor="email" className="font-industry-demi text-navy">
+            Email<span className="text-red-500">*</span>
+          </Label>
           <Input
             type="email"
             id="email"
@@ -78,30 +92,32 @@ const GroupTicketForm = () => {
             value={formData.email}
             onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
             required
+            className="border-navy/20 focus:border-green"
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="phone">Phone</Label>
+          <Label htmlFor="phone" className="font-industry-demi text-navy">Phone</Label>
           <Input
             type="tel"
             id="phone"
             name="phone"
             value={formData.phone}
             onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+            className="border-navy/20 focus:border-green"
           />
         </div>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="preferredCommunication">
-          Preferred Communication Method<span className="text-destructive">*</span>
+        <Label htmlFor="preferredCommunication" className="font-industry-demi text-navy">
+          Preferred Communication Method<span className="text-red-500">*</span>
         </Label>
         <Select 
           onValueChange={(value) => setFormData(prev => ({ ...prev, preferredCommunication: value }))}
           value={formData.preferredCommunication}
           required
         >
-          <SelectTrigger>
+          <SelectTrigger className="border-navy/20 focus:border-green">
             <SelectValue placeholder="Select preferred communication method" />
           </SelectTrigger>
           <SelectContent>
@@ -111,7 +127,12 @@ const GroupTicketForm = () => {
         </Select>
       </div>
 
-      <Button type="submit" className="w-full md:w-auto">Submit</Button>
+      <Button 
+        type="submit" 
+        className="w-full md:w-auto font-industry-ultra uppercase bg-green text-navy hover:bg-green/90 px-8 py-6"
+      >
+        Submit
+      </Button>
     </form>
   )
 }
@@ -139,20 +160,19 @@ export default function GroupTickets() {
       image: "/tickets/group-tickets/Rugby101.png"
     }
   ]
-  
 
   return (
-    <Card className="p-8 bg-background">
+    <Card className="p-8 bg-white border-none">
       <div className="max-w-6xl mx-auto space-y-12">
         <div className="space-y-6">
-          <h1 className="text-4xl font-bold text-primary">Group Tickets</h1>
-          <p className="text-xl text-muted-foreground">
+          <h1 className="text-4xl font-industry-ultra uppercase text-navy">Group Tickets</h1>
+          <p className="text-xl font-industry-book text-navy/80">
             Bring your friends and family to a Seattle Seawolves match and experience action-packed rugby like you've never seen before!
           </p>
         </div>
 
         <div className="space-y-6">
-          <h2 className="text-2xl font-bold text-primary">Seawolves Group Benefits</h2>
+          <h2 className="text-2xl font-industry-ultra uppercase text-navy">Seawolves Group Benefits</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               "Block seating to keep your group together",
@@ -163,8 +183,8 @@ export default function GroupTickets() {
               "Fundraising opportunities"
             ].map((benefit, index) => (
               <div key={index} className="flex items-start gap-3">
-                <Users className="w-5 h-5 text-primary flex-shrink-0 mt-1" />
-                <span className="text-muted-foreground">{benefit}</span>
+                <Users className="w-5 h-5 text-green flex-shrink-0 mt-1" />
+                <span className="font-industry-book text-navy/80">{benefit}</span>
               </div>
             ))}
           </div>
@@ -173,7 +193,7 @@ export default function GroupTickets() {
         <GroupTicketForm />
 
         <div className="space-y-6">
-          <h2 className="text-2xl font-bold text-primary">2024 Group Experiences</h2>
+          <h2 className="text-2xl font-industry-ultra uppercase text-navy">2024 Group Experiences</h2>
           <div className="grid md:grid-cols-2 gap-6">
             {experiences.map((exp, index) => (
               <ExperienceCard key={index} {...exp} />
@@ -181,14 +201,14 @@ export default function GroupTickets() {
           </div>
         </div>
 
-        <div className="text-center space-y-4 pt-6 border-t border-accent/20">
-          <p className="font-bold text-xl text-primary">Questions?</p>
-          <div className="flex flex-col sm:flex-row justify-center gap-6 text-muted-foreground">
-            <a href="tel:206-219-1504" className="flex items-center justify-center gap-2 hover:text-primary transition-colors">
+        <div className="text-center space-y-4 pt-6 border-t border-navy/10">
+          <p className="font-industry-ultra uppercase text-xl text-navy">Questions?</p>
+          <div className="flex flex-col sm:flex-row justify-center gap-6">
+            <a href="tel:206-219-1504" className="flex items-center justify-center gap-2 font-industry-demi text-green hover:text-green/90 transition-colors">
               <Phone className="w-5 h-5" />
               206-219-1504
             </a>
-            <a href="mailto:info@seawolves.rugby" className="flex items-center justify-center gap-2 hover:text-primary transition-colors">
+            <a href="mailto:info@seawolves.rugby" className="flex items-center justify-center gap-2 font-industry-demi text-green hover:text-green/90 transition-colors">
               <Mail className="w-5 h-5" />
               info@seawolves.rugby
             </a>

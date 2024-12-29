@@ -1,13 +1,15 @@
+'use client'
+
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { Mail, Phone, Ticket } from 'lucide-react'
+import { ArrowRight, Mail, Phone, Ticket } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-const TicketButton = ({ children }: { children: React.ReactNode }) => (
+const TicketButton = ({ children, className }: { children: React.ReactNode; className?: string }) => (
   <Button 
     size="lg" 
-    className="w-full max-w-md bg-primary hover:bg-primary/90 transition-colors"
+    className={`w-full max-w-md bg-green hover:bg-green/90 text-navy font-industry-ultra uppercase px-8 py-6 transition-all ${className}`}
     asChild
   >
     <Link
@@ -23,9 +25,9 @@ const TicketButton = ({ children }: { children: React.ReactNode }) => (
 )
 
 const BenefitCard = ({ title, description }: { title: string; description: string }) => (
-  <div className="bg-accent/10 p-6 rounded-lg">
-    <h5 className="font-bold text-lg mb-2 text-primary">{title}</h5>
-    <p className="text-muted-foreground">{description}</p>
+  <div className="bg-navy/5 p-6 rounded-lg hover:bg-navy/10 transition-colors">
+    <h5 className="font-industry-ultra uppercase text-lg mb-2 text-navy">{title}</h5>
+    <p className="font-industry-book text-navy/80">{description}</p>
   </div>
 )
 
@@ -46,19 +48,25 @@ export default function LeftSidebar() {
   ]
 
   return (
-    <Card className="p-8 bg-background">
+    <Card className="p-8 bg-white border-none shadow-lg">
       <div className="max-w-2xl mx-auto space-y-8">
         <div className="text-center">
-          <h3 className="text-3xl font-bold mb-4 text-primary">Seattle Seawolves 2025 Half-Season Tickets!</h3>
-          <p className="text-muted-foreground text-lg">
+          <h3 className="text-3xl font-industry-ultra uppercase mb-4 text-navy">
+            Seattle Seawolves 2025 Half-Season Tickets!
+          </h3>
+          <p className="font-industry-book text-navy/80 text-lg">
             Be part of the action with the Seattle Seawolves and experience the thrill of live rugby like never before.
           </p>
         </div>
 
-        <TicketButton>GET HALF SEASON TICKETS!</TicketButton>
+        <div className="flex justify-center">
+          <TicketButton>GET HALF SEASON TICKETS!</TicketButton>
+        </div>
 
-        <div className="space-y-6">
-          <h4 className="text-2xl font-bold text-primary">Why Choose Half-Season Tickets?</h4>
+        <div className="space-y-6 text-center">
+          <h4 className="text-2xl font-industry-ultra uppercase text-navy">
+            Why Choose Half-Season Tickets?
+          </h4>
           <div className="grid gap-6">
             {benefits.map((benefit, index) => (
               <BenefitCard key={index} {...benefit} />
@@ -77,21 +85,33 @@ export default function LeftSidebar() {
           />
         </div>
 
-        <TicketButton>SECURE YOUR HALF-SEASON TICKETS!</TicketButton>
+        <div className="flex flex-col items-center space-y-4">
+          <Image
+            src="/placeholder.svg?height=100&width=100"
+            alt="Ticket Graphic"
+            width={100}
+            height={100}
+            className="mb-2"
+          />
+          <TicketButton className="group">
+            SECURE YOUR HALF-SEASON TICKETS!
+            <ArrowRight className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" />
+          </TicketButton>
+        </div>
 
-        <div className="text-center space-y-4 border-t border-accent/20 pt-6">
-          <p className="font-bold text-xl text-primary">Questions?</p>
-          <div className="flex flex-col sm:flex-row justify-center gap-6 text-muted-foreground">
+        <div className="text-center space-y-4 border-t border-navy/10 pt-6">
+          <p className="font-industry-ultra uppercase text-xl text-navy">Questions?</p>
+          <div className="flex flex-col sm:flex-row justify-center gap-6">
             <Link 
               href="tel:206-219-1504" 
-              className="flex items-center justify-center gap-2 hover:text-primary transition-colors"
+              className="flex items-center justify-center gap-2 font-industry-demi text-green hover:text-green/90 transition-colors"
             >
               <Phone className="w-5 h-5" />
               206-219-1504
             </Link>
             <Link 
               href="mailto:info@seawolves.rugby" 
-              className="flex items-center justify-center gap-2 hover:text-primary transition-colors"
+              className="flex items-center justify-center gap-2 font-industry-demi text-green hover:text-green/90 transition-colors"
             >
               <Mail className="w-5 h-5" />
               info@seawolves.rugby

@@ -19,13 +19,13 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="h-full">
       <Card 
-        className="relative h-full overflow-hidden bg-background transition-all duration-300 hover:shadow-lg group"
+        className="relative h-full overflow-hidden bg-white border-none shadow-lg transition-all duration-300 hover:shadow-xl group"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         <CardContent className="p-0">
           <Link href={`/product/${product.handle}`} className="block">
-            <div className="relative aspect-square overflow-hidden bg-muted">
+            <div className="relative aspect-square overflow-hidden bg-navy/5">
               {/* Product Image */}
               <Image
                 src={product.featuredImage?.url || "/placeholder.svg?height=400&width=400"}
@@ -37,7 +37,7 @@ export function ProductCard({ product }: ProductCardProps) {
               
               {/* Gradient Overlay - Always visible but darker on hover */}
               <div 
-                className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent transition-opacity duration-300"
+                className="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/40 to-transparent transition-opacity duration-300"
                 style={{
                   opacity: isHovered ? 0.95 : 0.8
                 }}
@@ -45,42 +45,41 @@ export function ProductCard({ product }: ProductCardProps) {
 
               {/* Product Tags */}
               {product.tags && product.tags[0] && (
-                <Badge variant="secondary" className="absolute top-4 left-4 bg-primary text-primary-foreground">
+                <Badge 
+                  variant="secondary" 
+                  className="absolute top-4 left-4 bg-green text-navy font-industry-demi uppercase"
+                >
                   {product.tags[0]}
                 </Badge>
               )}
 
               {/* Product Information Overlay */}
               <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                <h2 className="text-lg font-semibold mb-2 line-clamp-1">
+                <h2 className="text-lg font-industry-ultra uppercase mb-2 line-clamp-1">
                   {product.title}
                 </h2>
-                <p className="text-sm text-white/80 line-clamp-2 mb-3 transition-opacity duration-300"
+                <p className="text-sm font-industry-book text-white/80 line-clamp-2 mb-3 transition-opacity duration-300"
                    style={{ opacity: isHovered ? 1 : 0.7 }}>
                   {product.description}
                 </p>
                 <div className="flex items-center justify-between">
-                  <span className="text-xl font-bold">${price}</span>
+                  <span className="text-xl font-industry-ultra">${price}</span>
                   {availableForSale ? (
                     <div className="flex gap-2">
-                      {/* <Button 
-                        variant="outline" 
-                        size="sm"
-                        className="bg-white/10 hover:bg-white/20 text-white border-white/20"
-                      >
-                        <Eye className="mr-2 h-4 w-4" />
-                        Quick View
-                      </Button> */}
                       <Button 
-                      className="bg-accent"
-                        variant="default" 
+                        className="bg-green text-navy hover:bg-green/90 font-industry-ultra uppercase py-2"
                         size="sm"
                       >
                         Buy Now
                       </Button>
                     </div>
                   ) : (
-                    <Badge variant="destructive">Out of Stock</Badge>
+                    <Badge 
+                      variant="destructive" 
+                      className="font-industry-demi uppercase"
+                    >
+                      Out of Stock
+                    </Badge>
                   )}
                 </div>
               </div>

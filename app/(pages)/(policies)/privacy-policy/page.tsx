@@ -2,7 +2,7 @@ import { Card } from '@/components/ui/card';
 
 const PrivacyPolicy = () => {
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen ">
       <div className="max-w-4xl mx-auto">
         <div className="space-y-8">
           <div className="text-center">
@@ -10,7 +10,7 @@ const PrivacyPolicy = () => {
             <p className="mt-2 text-gray-600">Effective May 18, 2017</p>
           </div>
 
-          <Card className="p-6 bg-white ">
+          <Card className="p-6  ">
             <div className="prose max-w-none">
               <p className="text-gray-700">
                 This privacy policy and terms of use sets out how Major League Rugby uses and protects any information you provide when using this website. If you have questions regarding our Privacy Policy and Terms of Use, please contact Major League Rugby via our contact page.

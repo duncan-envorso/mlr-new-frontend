@@ -2,11 +2,25 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { currentTeamConfig } from '@/config/teamConfig'
-import { Facebook, Instagram, ShoppingBag, Ticket, Twitter, Youtube } from 'lucide-react'
+import { ShoppingBag, Ticket } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { SocialIcon } from "react-social-icons"
+import MLRTeamsBar from '../TeamsBar'
 
 export default function Footer() {
+  const SocialLink = ({ href, network }: any) => (
+    <div className="hover:text-primary-foreground transition-colors">
+      <SocialIcon
+        url={href}
+        network={network}
+        style={{ height: 35, width: 35 }}
+        bgColor="transparent"
+        fgColor="currentColor"
+      />
+    </div>
+  )
+
   return (
     <>
       <footer
@@ -31,23 +45,11 @@ export default function Footer() {
                 priority
               />
               <div className="flex space-x-4 mt-4">
-                <Link href={currentTeamConfig?.socialMedia.facebook || '#'} className="hover:text-primary-foreground transition-colors">
-                  <Facebook className="w-6 h-6" />
-                </Link>
-                <Link href={currentTeamConfig?.socialMedia.instagram || '#'} className="hover:text-primary-foreground transition-colors">
-                  <Instagram className="w-6 h-6" />
-                </Link>
-                <Link href={currentTeamConfig?.socialMedia.twitter || '#'} className="hover:text-primary-foreground transition-colors">
-                  <Twitter className="w-6 h-6" />
-                </Link>
-                <Link href={currentTeamConfig?.socialMedia.youtube || '#'} className="hover:text-primary-foreground transition-colors">
-                  <Youtube className="w-6 h-6" />
-                </Link>
-                <Link href="https://www.tiktok.com/@seawolvesrugby" className="hover:text-primary-foreground transition-colors">
-                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
-                  </svg>
-                </Link>
+                <SocialLink href={currentTeamConfig?.socialMedia.facebook || '#'} network="facebook" />
+                <SocialLink href={currentTeamConfig?.socialMedia.instagram || '#'} network="instagram" />
+                <SocialLink href={currentTeamConfig?.socialMedia.twitter || '#'} network="x" />
+                <SocialLink href={currentTeamConfig?.socialMedia.youtube || '#'} network="youtube" />
+                <SocialLink href="https://www.tiktok.com/@seawolvesrugby" network="tiktok" />
               </div>
               <h3 className="text-lg font-semibold mt-4">Follow Us</h3>
             </div>
@@ -69,13 +71,12 @@ export default function Footer() {
           </div>
         </div>
 
+        <MLRTeamsBar />
+
         <Separator className="bg-white/20" />
 
-        {/* Quick Links Section */}
         <div className="flex justify-center items-center gap-8 py-6 px-4 flex-wrap">
-          {/* Download App Section */}
           <div className="text-center">
-            
             <div className="flex justify-center gap-4">
               <Link
                 href={currentTeamConfig?.appStoreLinks.ios || '#'}
@@ -92,28 +93,21 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Purchase Tickets Section */}
           <div className="text-center">
-          
             <Link href="/tickets" className="inline-flex items-center gap-2 bg-secondary hover:bg-secondary/90 text-secondary-foreground px-6 py-3 rounded-md">
               <Ticket className="w-5 h-5" />
               <span>Buy Tickets Now</span>
             </Link>
           </div>
 
-          {/* Shop Section */}
           <div className="text-center">
-           
             <Link href="/shop" className="inline-flex items-center gap-2 bg-secondary hover:bg-secondary/90 text-secondary-foreground px-6 py-3 rounded-md">
               <ShoppingBag className="w-5 h-5" />
               <span>Shop Merchandise</span>
             </Link>
           </div>
-
-        
         </div>
 
-        {/* Footer Links */}
         <nav className="flex flex-wrap justify-center gap-8 text-base m-5">
           <Link href="/privacy-policy" className="hover:underline text-lg">Privacy Policy</Link>
           <Link href="/media-credentials" className="hover:underline text-lg">Media Credentials</Link>
@@ -121,7 +115,6 @@ export default function Footer() {
           <Link href="/contact-us" className="hover:underline text-lg">Contact Us</Link>
         </nav>
 
-        {/* Copyright */}
         <div className="text-center text-sm text-white/80 max-w-4xl mx-auto pb-8">
           <p className="mb-2">© {new Date().getFullYear()} Major League Rugby. All rights reserved. Major League Rugby, MLR and the MLR shield design are registered trademarks of Major League Rugby.</p>
           <p>The team names, logos and designs are registered trademarks of the teams indicated.</p>

@@ -6,13 +6,11 @@ import {
   CarouselNext,
   CarouselPrevious
 } from '@/components/ui/carousel';
-import { currentTeamConfig } from '@/config/teamConfig';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { Sponsor } from '@/lib/types';
 import { Download } from 'lucide-react';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-import AppStoreButtons from './appStoreButtons';
 
 interface SponsorCarouselProps {
   sponsors?: Sponsor[];
@@ -40,12 +38,12 @@ const SponsorCarousel: React.FC<SponsorCarouselProps> = ({ sponsors = [] }, hero
   // Desktop view
   const DesktopCarousel = (
     <div className="hidden lg:flex flex-col items-center w-full">
-      <div className="w-[240px] mb-6">
+      {/* <div className="w-[240px] mb-6">
         {currentTeamConfig && (
           <AppStoreButtons currentTeamConfig={currentTeamConfig} heroData={heroData} />
         )}
 
-      </div>
+      </div> */}
 
       <div className="relative w-[240px]">
         <Carousel
@@ -65,7 +63,7 @@ const SponsorCarousel: React.FC<SponsorCarouselProps> = ({ sponsors = [] }, hero
                 className="pt-4 h-[120px]"
                 style={{ flex: '0 0 33.333%' }}
               >
-                <div className="relative h-[100px] border rounded-lg overflow-hidden shadow-md bg-secondary/50">
+                <div className="relative h-[100px] border rounded-lg overflow-hidden shadow-md bg-black/20 backdrop-blur-sm" >
                   <div className="absolute inset-0 flex items-center justify-center p-4">
                     <a
                       href={sponsor.sponsorUrl}

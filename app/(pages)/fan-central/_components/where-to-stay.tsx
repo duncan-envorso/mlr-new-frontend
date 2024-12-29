@@ -32,9 +32,10 @@ export default function WhereToStayView({ teamConfig }: WhereToStayViewProps) {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-100 via-gray-100 to-slate-200">
       {/* Hero Section */}
-      <div 
-        className="relative h-[40vh] min-h-[400px] bg-[url('https://seawolves.rugby/wp-content/uploads/sites/14/2023/11/explore-seattle-southside.png')] bg-cover bg-center"
-      >
+      <div className="relative h-[40vh] min-h-[400px] rounded-b-[2rem] overflow-hidden">
+        <div 
+          className="absolute inset-0 bg-[url('https://seawolves.rugby/wp-content/uploads/sites/14/2023/11/explore-seattle-southside.png')] bg-cover bg-center"
+        />
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 container mx-auto h-full flex flex-col justify-center px-4">
           <Badge variant="secondary" className="w-fit mb-4">Accommodations</Badge>
@@ -66,7 +67,7 @@ export default function WhereToStayView({ teamConfig }: WhereToStayViewProps) {
               >
                 <Button 
                   className="font-semibold"
-                  style={{ backgroundColor: colors.primary }}
+                  style={{ backgroundColor: colors.secondary }}
                 >
                   VIEW HOTEL DEALS
                 </Button>
@@ -126,3 +127,4 @@ export default function WhereToStayView({ teamConfig }: WhereToStayViewProps) {
     </div>
   );
 }
+

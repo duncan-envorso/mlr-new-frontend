@@ -35,9 +35,10 @@ export default function Rugby101View({ teamConfig }: { teamConfig: TeamConfig })
   const { colors } = teamConfig;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-100 via-gray-100 to-slate-200">
+    <div className="min-h-screen">
       {/* Hero Section */}
-      <div className="relative h-[40vh] min-h-[400px] bg-cover bg-center bg-[url('/images/banners/Seawolves-Kids-01.png')]">
+      <div className="relative rounded h-[40vh] min-h-[400px] bg-cover bg-center bg-[url('/images/banners/Seawolves-Kids-01.png')]" role="img" aria-label="Rugby players on the field">
+
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 container mx-auto h-full flex flex-col justify-center px-4">
           <Badge variant="secondary" className="w-fit mb-4">Learn</Badge>

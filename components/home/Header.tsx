@@ -10,7 +10,6 @@ import Link from "next/link"
 import { useEffect, useState } from "react"
 import { SocialIcon } from "react-social-icons"
 import CartModal from "../cart/modal"
-import MLRTeamsBar from "../TeamsBar"
 import MobileMenu from "./MobileMenu"
 import { TeamDropdown } from "./TeamDropDown"
 
@@ -97,7 +96,7 @@ export default function Header() {
       className="absolute top-full right-1/2 mt-4 w-[800px] bg-white rounded-lg shadow-lg overflow-hidden z-50"
       style={{ marginRight: '-400px' }}
     >
-      <div className="grid grid-cols-12 gap-0 h-[400px]">
+      <div className="grid grid-cols-12 gap-0 h-full">
         <div className="col-span-5 p-6 border-r border-gray-100">
           <div className="space-y-1">
             {fanCentralMenu.map((menuItem, index) => {
@@ -112,10 +111,10 @@ export default function Header() {
                   <div className="flex gap-3">
                     {Icon && <Icon className="h-5 w-5 text-primary mt-1" />}
                     <div>
-                      <h3 className="font-bold text-primary group-hover:text-accent transition-colors">
+                      <h3 className="font-bold text-xs text-primary group-hover:text-accent transition-colors">
                         {menuItem.name}
                       </h3>
-                      <p className="text-sm text-gray-600 mt-1">
+                      <p className="text-xs text-gray-600 mt-1">
                         {menuItem.description}
                       </p>
                     </div>
@@ -231,10 +230,10 @@ export default function Header() {
                         {item.name}
                         <ChevronDown
                           className={`h-4 w-4 transition-transform duration-300 ${(item.name === "FAN CENTRAL" && isFanCentralOpen) ||
-                              (item.name === "TEAM" && isTeamDropdownOpen) ||
-                              (item.name === "BUY TICKETS" && isTicketsOpen)
-                              ? 'rotate-180'
-                              : ''
+                            (item.name === "TEAM" && isTeamDropdownOpen) ||
+                            (item.name === "BUY TICKETS" && isTicketsOpen)
+                            ? 'rotate-180'
+                            : ''
                             }`}
                         />
                       </Button>
@@ -274,7 +273,8 @@ export default function Header() {
               </div>
             </nav>
 
-            <div className="hidden md:flex items-center justify-end space-x-4 z-10 ml-24">
+
+            <div className="hidden md:flex items-center justify-end space-x-2 z-10 ml-2">
               <CartModal />
               {socialIcons.map((social) => (
                 <SocialIcon
@@ -291,6 +291,7 @@ export default function Header() {
               ))}
             </div>
 
+
             <Button
               variant="ghost"
               size="icon"
@@ -303,13 +304,13 @@ export default function Header() {
           </div>
 
           <div
-            className="absolute top-0 right-0 bottom-0 w-2/4 bg-accent transform skew-x-[-15deg] origin-top-right"
+            className="absolute top-0 right-0 bottom-0 w-2/4 bg-secondary transform skew-x-[-15deg] origin-top-right"
             style={{ right: '-25%' }}
           />
         </div>
 
         <MobileMenu setIsMenuOpen={setIsMenuOpen} isMenuOpen={isMenuOpen} />
-        <MLRTeamsBar />
+       
       </motion.header>
     </>
   )

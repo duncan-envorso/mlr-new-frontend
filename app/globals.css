@@ -2,108 +2,66 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  /* Font face declarations */
+  @font-face {
+    font-family: 'Road Rage';
+    src: url('/fonts/Road_Rage.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Industry Ultra';
+    src: url('/fonts/Industry-Ultra.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
 
-/* add the code bellow */ 
-@layer utilities {
-    /* Hide scrollbar for Chrome, Safari and Opera */
-    .no-scrollbar::-webkit-scrollbar {
-        display: none;
-    }
-   /* Hide scrollbar for IE, Edge and Firefox */
-    .no-scrollbar {
-        -ms-overflow-style: none;  /* IE and Edge */
-        scrollbar-width: none;  /* Firefox */
+  @font-face {
+    font-family: 'Industry Demi';
+    src: url('/fonts/Industry-Demi.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Industry Book';
+    src: url('/fonts/Industry-Book.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  /* Brand typography rules */
+  h1, h2, h3 {
+    @apply font-industry-ultra uppercase tracking-wide;
+  }
+
+  h4, h5, h6 {
+    @apply font-industry-demi tracking-normal;
+  }
+
+  body {
+    @apply font-industry-book text-navy leading-relaxed;
+  }
+
+  /* Special display text class for Road Rage font */
+  .display-text {
+    @apply font-road-rage uppercase;
   }
 }
 
-@font-face {
-    font-family: 'IndustryTest-Black';
-    src: url('/fonts/IndustryTest-Black.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
   
-  @font-face {
-    font-family: 'IndustryTest-Bold';
-    src: url('/fonts/IndustryTest-Bold.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
-  
-  @font-face {
-    font-family: 'IndustryTest-Medium';
-    src: url('/fonts/IndustryTest-Medium.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-  }
-  
-  @font-face {
-    font-family: 'IndustryTest-Book';
-    src: url('/fonts/IndustryTest-Book.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-  }
-  
-  @font-face {
-    font-family: 'IndustryTest-Demi';
-    src: url('/fonts/IndustryTest-Demi.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-  }
-  
-  @font-face {
-    font-family: 'IndustryTest-Light';
-    src: url('/fonts/IndustryTest-Light.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-  }
-  
-  @font-face {
-    font-family: 'IndustryTest-Thin';
-    src: url('/fonts/IndustryTest-Thin.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-  }
-  
-  /* Apply the fonts to the respective elements */
-  h1 { @apply font-h1; }
-  h2 { @apply font-h2; }
-  h3 { @apply font-h3; }
-  h4 { @apply font-h4; }
-  h5 { @apply font-h5; }
-  h6 { @apply font-h6; }
-  body { @apply font-body; }
-
-
-  @layer base {
-  :root {
-        --sidebar-background: 0 0% 98%;
-        --sidebar-foreground: 240 5.3% 26.1%;
-        --sidebar-primary: 240 5.9% 10%;
-        --sidebar-primary-foreground: 0 0% 98%;
-        --sidebar-accent: 240 4.8% 95.9%;
-        --sidebar-accent-foreground: 240 5.9% 10%;
-        --sidebar-border: 220 13% 91%;
-        --sidebar-ring: 217.2 91.2% 59.8%;
-        --background: rgba(198, 30, 30, 0.8); /* Example value */
-        --border: #e5e7eb;
-    }
-  .dark {
-        --sidebar-background: 240 5.9% 10%;
-        --sidebar-foreground: 240 4.8% 95.9%;
-        --sidebar-primary: 224.3 76.3% 48%;
-        --sidebar-primary-foreground: 0 0% 100%;
-        --sidebar-accent: 240 3.7% 15.9%;
-        --sidebar-accent-foreground: 240 4.8% 95.9%;
-        --sidebar-border: 240 3.7% 15.9%;
-        --sidebar-ring: 217.2 91.2% 59.8%;
-    }
 }
 

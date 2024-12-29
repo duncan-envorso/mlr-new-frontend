@@ -3,7 +3,7 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardTitle } from '@/components/ui/card';
-import { Player } from '@/lib/types';
+import { RosterData, RosterMember } from '@/lib/types/roster';
 import { motion, useInView } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
@@ -12,22 +12,8 @@ import { useRef, useState } from 'react';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 
-
-
-interface Coach {
-  id: number;
-  name: string;
-  job_title: string;
-  portrait: string;
-}
-
-interface TeamData {
-  players: Player[];
-  coaches: Coach[];
-}
-
-interface TeamRosterProps {
-  apiFormattedData: TeamData;
+interface RosterSectionProps {
+  rosterData: RosterData;
 }
 
 const responsive = {
@@ -48,9 +34,8 @@ const responsive = {
   }
 };
 
-export default function CombinedSection({ apiFormattedData }: TeamRosterProps) {
+export default function RosterSection({ rosterData }: RosterSectionProps) {
   const [hoveredMember, setHoveredMember] = useState<string | null>(null);
-  const allMembers = [...apiFormattedData.players, ...apiFormattedData.coaches];
 
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
@@ -82,14 +67,14 @@ export default function CombinedSection({ apiFormattedData }: TeamRosterProps) {
       <div className="custom-button-group absolute left-4 right-4 top-1/2 flex -translate-y-1/2 transform justify-between">
         <Button
           onClick={previous}
-          className="z-10 rounded-full bg-primary p-2 text-primary-foreground shadow-lg transition-all hover:bg-primary/80 hover:shadow-xl"
+          className="z-10 rounded-full bg-green p-2 text-navy shadow-lg transition-all hover:bg-green/90 hover:shadow-xl"
           aria-label="Previous slide"
         >
           <ChevronLeft className="h-6 w-6" />
         </Button>
         <Button
           onClick={next}
-          className="z-10 rounded-full bg-primary p-2 text-primary-foreground shadow-lg transition-all hover:bg-primary/80 hover:shadow-xl"
+          className="z-10 rounded-full bg-green p-2 text-navy shadow-lg transition-all hover:bg-green/90 hover:shadow-xl"
           aria-label="Next slide"
         >
           <ChevronRight className="h-6 w-6" />
@@ -100,15 +85,15 @@ export default function CombinedSection({ apiFormattedData }: TeamRosterProps) {
 
   return (
     <section ref={ref} className="relative overflow-hidden py-24">
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-black/90 to-black"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-navy via-navy/90 to-navy"></div>
       <Image
-        src="/images/DawgTown2024Web.webp"
+        src="/images/starfire-stadium.jpg"
         alt="Stadium Background"
-        layout="fill"
-        objectFit="cover"
+        fill
         quality={100}
         className="opacity-30"
         priority
+        style={{ objectFit: 'cover' }}
       />
 
       <div className="container relative z-10 mx-auto px-4">
@@ -118,7 +103,7 @@ export default function CombinedSection({ apiFormattedData }: TeamRosterProps) {
           variants={containerVariants}
         >
           <motion.h2
-            className="text-4xl font-bold font-heading text-primary-foreground mb-6 text-center"
+            className="text-4xl font-industry-ultra uppercase text-white mb-6 text-center"
             variants={itemVariants}
           >
             Meet the Team
@@ -134,16 +119,16 @@ export default function CombinedSection({ apiFormattedData }: TeamRosterProps) {
               itemClass="px-4"
               containerClass="pb-12"
             >
-              {allMembers.map((member) => (
+              {rosterData.map((member: RosterMember) => (
                 <motion.div
-                  key={member.id}
+                  key={member.team_id}
                   variants={itemVariants}
-                  onMouseEnter={() => setHoveredMember(member.id.toString())}
+                  onMouseEnter={() => setHoveredMember(member.team_id)}
                   onMouseLeave={() => setHoveredMember(null)}
                   className="px-2"
                 >
-                  <Link href={`/roster/${member.id}`}>
-                    <Card className="group h-[420px] w-full cursor-pointer overflow-hidden rounded-lg border-none bg-black/50 shadow-lg backdrop-blur-md transition-all duration-300 hover:shadow-2xl">
+                  <Link href={`/roster/${member.team_id}`}>
+                    <Card className="group h-[420px] w-full cursor-pointer overflow-hidden rounded-lg border-none bg-navy/50 shadow-lg backdrop-blur-md transition-all duration-300 hover:shadow-2xl">
                       <div className="relative h-full">
                         <Image
                           src={member.portrait || '/placeholder-image.jpg'}
@@ -153,24 +138,20 @@ export default function CombinedSection({ apiFormattedData }: TeamRosterProps) {
                           objectPosition="top center"
                           className="transition-transform duration-300 ease-in-out group-hover:scale-110"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent opacity-80 transition-opacity duration-300 group-hover:opacity-100"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/70 to-transparent opacity-80 transition-opacity duration-300 group-hover:opacity-100"></div>
                         <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                          <CardTitle className="mb-2 text-2xl font-bold transition-transform duration-300 group-hover:translate-y-[-4px]">
+                          <CardTitle className="mb-2 text-2xl font-industry-ultra uppercase transition-transform duration-300 group-hover:translate-y-[-4px]">
                             {member.name}
                           </CardTitle>
                           <Badge
                             variant="secondary"
-                            className="mb-3 bg-primary text-sm font-semibold text-primary-foreground"
+                            className="mb-3 bg-green text-sm font-industry-demi uppercase text-navy"
                           >
-                            {'position' in member
-                              ? member.position
-                              : member.job_title}
+                            {member.position}
                           </Badge>
-                          {'height' in member && 'weight' in member && (
-                            <p className="text-sm text-gray-300 opacity-0 transition-all duration-300 group-hover:opacity-100">
-                              {member.height} cm | {member.weight} kg
-                            </p>
-                          )}
+                          <p className="text-sm font-industry-book text-gray-300 opacity-0 transition-all duration-300 group-hover:opacity-100">
+                            {member.height} cm | {member.weight} kg
+                          </p>
                         </div>
                       </div>
                     </Card>
@@ -182,7 +163,7 @@ export default function CombinedSection({ apiFormattedData }: TeamRosterProps) {
 
           <motion.div className="mt-12 text-center" variants={itemVariants}>
             <Link href="/roster">
-              <Button className="bg-primary px-6 py-3 text-lg font-semibold text-primary-foreground shadow-lg transition-all hover:bg-primary/80 hover:shadow-xl">
+              <Button className="font-industry-ultra uppercase bg-green px-8 py-6 text-lg text-navy shadow-lg transition-all hover:bg-green/90 hover:shadow-xl">
                 View Full Roster
                 <ChevronRight className="ml-2 h-5 w-5" />
               </Button>

@@ -1,8 +1,8 @@
 // app/shop/page.tsx
-import { getCollectionProducts, getCollections, getMenu } from '@/lib/shopify';
+import { getCollectionProducts, getCollections, getMenu, getProducts } from '@/lib/shopify';
 import { Product } from '@/lib/shopify/types';
-import { Suspense } from 'react';
 import ShopContent from './_components/ShopContent';
+import ShopProductsGrid from './_components/ShopProductGrid';
 
 export default async function ShopPage() {
   // First get collections and menu
@@ -26,6 +26,8 @@ export default async function ShopPage() {
         return null;
       }
 
+      
+
       const products = await getCollectionProducts({
         collection: handle,
         sortKey: 'TITLE',
@@ -45,13 +47,13 @@ export default async function ShopPage() {
     collection !== null
   );
 
+  const allProducts = await getProducts({});
+
   return (
     <>
-      <Suspense fallback={<div>Loading navigation...</div>}>
-      </Suspense>
-      <Suspense fallback={<p>Loading shop content...</p>}>
+     
        <ShopContent menus={menu} collections={filteredCollections} />
-      </Suspense>
+      <ShopProductsGrid products={allProducts} />
     </>
   );
 }

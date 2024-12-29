@@ -1,11 +1,11 @@
-import StadiumInfo from "../_components/matchday";
+import MatchDayComponent from "../_components/matchday";
 
 function MatchDay() {
     return (
       <div>
-        {/* ... existing code ... */}
-        <StadiumInfo />
-        {/* ... existing code ... */}
+      
+        <MatchDayComponent />
+       
       </div>
     );
   }

@@ -24,16 +24,17 @@ export default function NewsPageComponent({ posts }: { posts: NewsPostList[] }) 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="container mx-auto mt-6 border-none p-4"
+      className="container mx-auto mt-10 border-none p-4"
     >
       <motion.h1
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.2 }}
-        className="mb-8 text-4xl font-bold text-foreground tracking-tight"
+        className=" text-4xl font-bold text-foreground tracking-tight"
       >
-        Team News
+        Latest Team News
       </motion.h1>
+      <motion.p  className="mb-4 tracking-tight">See the latest updates from your Seattle Seawolves</motion.p>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -50,25 +51,26 @@ export default function NewsPageComponent({ posts }: { posts: NewsPostList[] }) 
               transition={{ duration: 0.3 }}
             >
               <Link href={`/news/${article.id}`}>
-                <Card className="group relative flex flex-col overflow-hidden bg-card transition-all duration-300 hover:shadow-md hover:-translate-y-1">
-                  <div className="relative h-64 w-full overflow-hidden">
+                <Card className="group flex flex-col overflow-hidden bg-card transition-all duration-300 hover:shadow-md hover:-translate-y-1">
+                  <div className="relative aspect-video w-full overflow-hidden">
                     <Suspense fallback={<div className="h-full w-full bg-muted animate-pulse"></div>}>
                       <Image
                         src={article.image || '/images/seawolves-logo.png'}
                         alt={article.title || 'Rugby news'}
                         fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-110"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        style={{ objectFit: 'cover' }}
-                        className="transition-transform duration-500 group-hover:scale-110"
+                        quality={85}
+                        priority
                       />
                     </Suspense>
                     <motion.div
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.2 }}
-                      className="absolute left-4 top-4"
+                      className="absolute left-4 top-4 z-10"
                     >
-                      <Badge variant="secondary" className="bg-primary text-primary-foreground shadow-md">
+                      <Badge variant="secondary" className="bg-secondary text-primary shadow-md">
                         {article.type}
                       </Badge>
                     </motion.div>
@@ -129,3 +131,4 @@ export default function NewsPageComponent({ posts }: { posts: NewsPostList[] }) 
     </motion.div>
   );
 }
+

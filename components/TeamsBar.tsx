@@ -34,8 +34,8 @@ export default function MLRTeamsBar() {
                 <Image
                   src="https://media.licdn.com/dms/image/C5612AQEctSPCsX6VCQ/article-cover_image-shrink_720_1280/0/1520086681323?e=2147483647&v=beta&t=Xp-va923Kr3_XvsgouEOE7Bi-mss3R1weIJpcnJ5uBc"
                   alt="MLR Logo"
-                  width={90}
-                  height={90}
+                  width={120}
+                  height={120}
                   className="ml-8"
                 />
                 </Link>

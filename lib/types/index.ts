@@ -74,14 +74,19 @@ export interface NewsPostList {
   date_formatted: string;
 }
 
-export type MatchesData = {
-  upcomingMatchesData: Match[];
-  pastMatchesData: Match[];
-};
 
-export type Match = {
+export interface Team {
+  name: string;
+  shortName: string;
+  wins: number | null;
+  losses: number | null;
+  draws: number | null;
+  image_path: string;
+}
+
+export interface Match {
   venue: string;
-  start_time: string; 
+  start_time: string;
   round: number;
   name: string;
   match_id: string;
@@ -90,7 +95,8 @@ export type Match = {
   away_score: number | null;
   homeTeam: Team;
   awayTeam: Team;
-};
+  tickets_url?: string;
+}
 
 
 export interface TeamConfig {

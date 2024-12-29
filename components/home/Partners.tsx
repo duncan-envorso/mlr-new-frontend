@@ -81,7 +81,7 @@ export function PartnerSection({ sponsorsData }: { sponsorsData: Partner[] }) {
   if (!sponsorsData?.length) return null
 
   return (
-    <section className="py-12 w-full mx-auto px-4 bg-gray-50">
+    <section className="py-12 w-full mx-auto px-4 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="text-center space-y-2 mb-8">
           <h2 className="text-3xl font-bold text-gray-900">
