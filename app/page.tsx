@@ -1,4 +1,4 @@
-import { fetchRosterData, fetchTeamData, getHeroData, getNewsPosts } from '@/actions'
+import { fetchRosterData, fetchTeamData, getHeroData, getMatches, getNewsPosts } from '@/actions'
 import { authOptions } from '@/auth'
 import HeroSectionTwo from '@/components/home/herosection2'
 import NewsSection from '@/components/home/LatestNews'
@@ -18,10 +18,9 @@ export default async function Home() {
   console.log('sessions', session?.user)
   const roster = await fetchRosterData()
   console.log("roster", roster)
-  const data = await fetch(`${process.env.NEXT_API_URL}/matches`, {
-    next: { revalidate: 60 }
-  });
-  const matches = await data.json();
+
+  const matches = await getMatches();
+  let standingsData = null;
 
 
 

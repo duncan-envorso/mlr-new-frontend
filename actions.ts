@@ -8,7 +8,7 @@ import { z } from "zod";
 import { currentTeamConfig } from './config/teamConfig';
 import { CombinedTeamData, RosterData, StaffMember } from './lib/types/roster';
 
-const API_URL = process.env.NEXT_API_URL 
+const API_URL = process.env.API_URL 
 const TEAM_ID = '034db172-942f-48b8-bc91-a0b3eb3a025f';
 
 export async function fetchTeamData(): Promise<CombinedTeamData> {
@@ -149,17 +149,8 @@ export async function getRelatedArticles(currentArticleId: string, limit: number
   }
 }
 
-async function getStandingsData() {
-  const res = await fetch(
-    `${API_URL}/standings?teamId=${TEAM_ID}`,
-    {
-      next: { tags: ['standings'] }
-    }
-  );
 
-  if (!res.ok) throw new Error('Failed to fetch standings data');
-  return res.json();
-}
+
 
 export async function getMatchById(id: string) {
   try {
@@ -175,6 +166,7 @@ export async function getMatchById(id: string) {
         },
       }
     );
+
 
     if (!response.ok) {
       if (response.status === 404) {
@@ -284,6 +276,7 @@ export async function fetchRosterData(): Promise<RosterData> {
 }
 
 export async function fetchStaffData(): Promise<StaffMember[]> {
+  const API_URL = process.env.API_URL
   const requestConfig = {
     headers: {
       'x-client-app-version': '2.0.17'
@@ -438,4 +431,68 @@ export async function clearUserPreferences() {
   const cookieStore = await cookies();
   cookieStore.delete('userPreferences');
 
+}
+
+export async function getMatches(seasonId?: string) {
+  try {
+    const queryParams = new URLSearchParams({
+      teamId: TEAM_ID
+    });
+    
+    if (seasonId) {
+      queryParams.append('seasonId', seasonId);
+    }
+
+    const response = await fetch(
+      `${API_URL}/matches?${queryParams}`,
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        next: { revalidate: 3600 }
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch matches');
+    }
+
+    const matches = await response.json(); // Read the response body once
+    console.log("matches", matches); // Use the already read data
+
+    return matches;
+  } catch (error) {
+    console.error('Error fetching matches:', error);
+    throw error;
+  }
+}
+
+
+
+export async function fetchStandings(seasonId: string) {
+  const API_URL = process.env.API_URL;
+  const TEAM_ID = process.env.NEXT_PUBLIC_TEAM_ID;
+
+
+  if (!API_URL || !TEAM_ID) {
+    throw new Error('Missing environment variables: API_URL or TEAM_ID');
+  }
+
+  const url = `${API_URL}/standings?seasonId=${seasonId}&teamId=${TEAM_ID}`;
+
+  console.log('url', url)
+  
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      Accept: '*/*',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch standings: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  return data;
 }

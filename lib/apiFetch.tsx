@@ -3,7 +3,7 @@
 import { authOptions } from '@/auth';
 import { getServerSession } from 'next-auth';
 
-const API_URL = process.env.NEXT_API_URL;
+const API_URL = process.env.API_URL;
 
 interface FetchOptions extends RequestInit {
   requireAuth?: boolean;
