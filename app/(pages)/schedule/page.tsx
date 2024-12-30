@@ -9,12 +9,12 @@ const teamId = currentTeamConfig?.teamId || '034db172-942f-48b8-bc91-a0b3eb3a025
 
 
 export default async function SchedulePage() {
-  const data = await fetch('https://api.seawolves.envorso.com/v1/matches', {
+  const data = await fetch(`${process.env.NEXT_API_URL}/matches`, {
     next: { revalidate: 60 }
   })
 
   const standings = await fetch(
-    `https://api.seawolves.envorso.com/v1/standings?teamId=${teamId}`,
+    `${process.env.NEXT_API_URL}/standings?teamId=${teamId}`,
     { next: { revalidate: 60 } }
   )
 

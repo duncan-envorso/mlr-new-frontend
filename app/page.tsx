@@ -18,11 +18,10 @@ export default async function Home() {
   console.log('sessions', session?.user)
   const roster = await fetchRosterData()
   console.log("roster", roster)
-  const data = await fetch('https://api.seawolves.envorso.com/v1/matches', {
+  const data = await fetch(`${process.env.NEXT_API_URL}/matches`, {
     next: { revalidate: 60 }
-  })
+  });
   const matches = await data.json();
-
 
 
 

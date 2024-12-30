@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import { toast } from '@/hooks/use-toast'
+import { apiFetch } from '@/lib/apiFetch'
 import { HeroData, Sponsor } from '@/lib/types'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { ChevronDown, Pencil, ShoppingBag, Ticket } from 'lucide-react'
@@ -27,39 +28,28 @@ export default function HeroSectionTwo({ initialHeroData }: HeroSectionTwoProps)
     const [isEditing, setIsEditing] = useState(false)
     const sectionRef = useRef(null)
     const { data: session, status } = useSession()
+
     const isAuthenticated = status === 'authenticated'
 
     useEffect(() => {
         const fetchHeroData = async () => {
             try {
-                const response = await fetch(
-                    'https://api.seawolves.envorso.com/v1/panel/config/034db172-942f-48b8-bc91-a0b3eb3a025f',
-                    {
-                        headers: {
-                            'accept': 'application/json',
-                        },
-                    }
-                )
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`)
-                }
-                const data = await response.json()
-                setHeroData(data.configurations || [])
+                const data = await apiFetch(`/panel/config/${process.env.NEXT_PUBLIC_TEAM_ID}`);
+                setHeroData(data.configurations || []);
             } catch (error) {
-                console.error('Failed to fetch hero data:', error)
+                console.error('Failed to fetch hero data:', error);
                 toast({
                     title: "Error",
                     description: "Failed to load hero data. Please refresh the page.",
                     variant: "destructive",
-                })
+                });
             } finally {
-                setIsLoading(false)
+                setIsLoading(false);
             }
-        }
+        };
 
-        fetchHeroData()
-    }, []) // Remove session dependency since we don't need it for viewingsion])
-
+        fetchHeroData();
+    }, []);
     const currentHeroData = heroData.find(config => config.key === 'heroData')?.value || {
         title: '',
         subtitle: '',
@@ -75,65 +65,55 @@ export default function HeroSectionTwo({ initialHeroData }: HeroSectionTwoProps)
         router.push('/tickets') // Use router.push to redirect on the client side
     }
     const handleSaveHeroData = async (updatedData: HeroData) => {
-        if (!isAuthenticated) {
+        if (!session) {
             toast({
                 title: "Error",
                 description: "You must be signed in to edit the hero section.",
                 variant: "destructive",
-            })
-            return
+            });
+            return;
         }
 
         try {
             const payload = {
                 key: 'heroData',
                 value: updatedData
-            }
+            };
 
-            const response = await fetch(
-                'https://api.seawolves.envorso.com/v1/panel/config?teamId=034db172-942f-48b8-bc91-a0b3eb3a025f',
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${session?.user.accessToken}`,
-                    },
-                    body: JSON.stringify(payload)
-                }
-            )
+            const responseData = await apiFetch(`/panel/config?teamId=${process.env.NEXT_PUBLIC_TEAM_ID}`, {
+                method: 'POST',
+                requireAuth: true,
+                body: JSON.stringify(payload)
+            });
 
-            const responseData = await response.json()
-
-            if (!response.ok) {
-                throw new Error(responseData.error || `HTTP error! status: ${response.status}`)
-            }
+            console.log("responseData", responseData)
 
             setHeroData(prevData => {
-                const newData = [...prevData]
-                const index = newData.findIndex(config => config.key === 'heroData')
+                const newData = [...prevData];
+                const index = newData.findIndex(config => config.key === 'heroData');
                 if (index !== -1) {
-                    newData[index] = { key: 'heroData', value: updatedData }
+                    newData[index] = { key: 'heroData', value: updatedData };
                 } else {
-                    newData.push({ key: 'heroData', value: updatedData })
+                    newData.push({ key: 'heroData', value: updatedData });
                 }
-                return newData
-            })
+                return newData;
+            });
 
             toast({
                 title: "Success",
                 description: responseData.message || "Hero section updated successfully",
-            })
-
-            setIsEditing(false)
+            });
+            setIsEditing(false);
         } catch (error) {
-            console.error('Failed to save hero data:', error)
+            console.error('Failed to save hero data:', error);
             toast({
                 title: "Error",
                 description: error instanceof Error ? error.message : "Failed to save changes. Please try again.",
                 variant: "destructive",
-            })
+            });
         }
-    }
+    };
+
 
     const handleSponsorsUpdate = async (updatedSponsors: Sponsor[]) => {
         if (!isAuthenticated) {
@@ -218,7 +198,7 @@ export default function HeroSectionTwo({ initialHeroData }: HeroSectionTwoProps)
 
     return (
         <section ref={sectionRef} className="relative min-h-screen w-full overflow-hidden">
-            {isAuthenticated && (
+            {session && (
                 <Button
                     variant="outline"
                     size="icon"
