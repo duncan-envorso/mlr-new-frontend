@@ -42,26 +42,38 @@ export async function fetchTeamData(): Promise<CombinedTeamData> {
   }
 }
 
+
 export async function getNewsPosts(): Promise<NewsPostList[]> {
+  const API_URL = process.env.API_URL; // Use environment variables for API URL
+
+  if (!API_URL || !currentTeamConfig?.teamId) {
+    console.error('Missing required configuration for fetching news posts');
+    notFound();
+  }
+
   try {
     const response = await fetch(
-      `${API_URL}/articles?teamId=${currentTeamConfig?.teamId}&status=published`,
+      `${API_URL}/articles?teamId=${currentTeamConfig.teamId}&status=published`,
       {
         headers: {
-          'x-client-app-version': '2.0.17'
+          'x-client-app-version': '2.0.17',
         },
-        next: { revalidate: 3600 }
+        next: { revalidate: 3600 }, // Leverage Next.js caching
       }
     );
+
     if (!response.ok) {
       throw new Error('Failed to fetch news posts');
     }
-    return await response.json();
+
+    const data: NewsPostList[] = await response.json();
+    return data;
   } catch (error) {
-    console.error('Error fetching news posts:', error);
+    console.log('Error fetching news posts:', error);
     notFound();
   }
 }
+
 
 export async function getNewsPostById(id: string): Promise<NewsPost> {
   try {

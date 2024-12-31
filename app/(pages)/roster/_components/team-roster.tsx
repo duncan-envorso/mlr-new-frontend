@@ -139,7 +139,7 @@ function RosterSkeleton() {
 }
 
 export default function TeamRosterView({ roster }: { roster: RosterMember[] }) {
-  const [useMetric, setUseMetric] = useState(true);
+  const [useMetric, setUseMetric] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [positionFilter, setPositionFilter] = useState<string>('all');
@@ -185,7 +185,7 @@ export default function TeamRosterView({ roster }: { roster: RosterMember[] }) {
         <h1 className="text-3xl font-bold tracking-tight">Team Roster</h1>
         <div className="flex items-center gap-2">
           <Label htmlFor="unit-toggle" className="text-sm font-medium">
-            {useMetric ? "Metric" : "Imperial"}
+            {useMetric ? "Imperial" : "Metric"}
           </Label>
           <Switch
             id="unit-toggle"

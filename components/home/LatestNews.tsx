@@ -110,13 +110,13 @@ export default function NewsCarousel({ news }: NewsSectionProps) {
             className="text-2xl sm:text-3xl md:text-4xl font-industry-ultra uppercase text-white mb-2 sm:mb-4 text-center"
             variants={itemVariants}
           >
-            Latest Rugby News
+            Latest Team News
           </motion.h2>
           <motion.p
             className="text-base sm:text-lg md:text-xl font-industry-book text-white text-center mb-6 sm:mb-8 md:mb-12"
             variants={itemVariants}
           >
-            Stay updated with the latest happenings in the rugby world
+          See the latest updates from your Seattle Seawolves
           </motion.p>
 
           <motion.div className="relative -mx-2 sm:mx-0" variants={containerVariants}>
